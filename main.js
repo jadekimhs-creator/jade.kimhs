@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --------------------------------------------------
-    // 1. Theme Toggle Logic (홈 화면용)
+    // 1. Theme Toggle Logic
     // --------------------------------------------------
     const themeToggle = document.getElementById('theme-toggle');
     const currentTheme = localStorage.getItem('theme');
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --------------------------------------------------
-    // 2. Lotto Logic (로또 페이지용)
+    // 2. Lotto Logic
     // --------------------------------------------------
     const generateBtn = document.getElementById('generate-btn');
     const numbersContainer = document.getElementById('numbers');
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --------------------------------------------------
-    // 3. Video Playlist Logic (흉가 페이지용)
+    // 3. Video Playlist Logic (Haunted House)
     // --------------------------------------------------
     var videoItems = document.querySelectorAll('.video-item');
     var mainVideo = document.getElementById('main-video');
@@ -90,20 +90,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --------------------------------------------------
-    // 4. 음악 재생 로직 (MP3 전용 - 제공된 소스 적용)
+    // 4. Our Journey Movie Logic (Provided Source)
     // --------------------------------------------------
     const music = document.getElementById('bg-music');
     const musicBtn = document.getElementById('music-toggle');
+    const movieSlideshow = document.getElementById('slideshow');
+    const movieText = document.getElementById('movie-text');
 
+    // 재생 로직
     if (music && musicBtn) {
-        music.volume = 0.4;
+        music.volume = 0.6; // 볼륨 상향
 
         const playMusic = () => {
             music.play().then(() => {
                 musicBtn.innerText = "🔊 Music Off";
                 musicBtn.classList.add('playing');
             }).catch(err => {
-                console.log("재생 준비 중...", err);
+                console.log("화면을 클릭해야 재생됩니다!", err);
             });
         };
 
@@ -124,12 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { once: true });
     }
 
-    // --------------------------------------------------
-    // 5. 슬라이드쇼 로직 (제공된 소스 적용)
-    // --------------------------------------------------
-    const movieSlideshow = document.getElementById('slideshow');
-    const movieText = document.getElementById('movie-text');
-
+    // 슬라이드쇼
     if (movieSlideshow) {
         const movieImages = [
             'img/KakaoTalk_20260422_000845968.jpg', 'img/KakaoTalk_20260422_000845968_01.jpg',
@@ -144,12 +142,12 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         const messages = [
-            "우리의 소중한 기록들을 시작합니다...",
-            "함께 웃고 떠들던 그날의 기억",
-            "우리는 조금씩 서로에게 물들어갔죠",
-            "함께 걷는 이 길이 너무나 소중해요",
-            "우리의 매 순간이 영화 같은 기적",
-            "사랑하는 마음을 담아 기록합니다."
+            "본격적인 우리의 이야기 출발! 🚀",
+            "빵 터졌던 그날 기억나? 😆",
+            "함께라서 매일매일이 시트콤 팝콘각 🍿",
+            "앞으로도 이렇게 신나게 놀자! 🎉",
+            "너랑 노는 게 제일 재밌어 👍",
+            "우리의 즐거운 에너지는 무한대! ⚡"
         ];
 
         movieImages.forEach((src) => {
@@ -185,9 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(updateMovieSlide, 5000);
     }
 
-    // --------------------------------------------------
-    // 6. 갤러리 모달 로직 (제공된 소스 적용)
-    // --------------------------------------------------
+    // 갤러리 모달
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('expandedImg');
     const galleryImages = document.querySelectorAll('.gallery-item img');
