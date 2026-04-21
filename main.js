@@ -203,15 +203,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (musicBtn && music) {
             musicBtn.addEventListener('click', () => {
                 if (music.paused) {
-                    music.play();
-                    musicBtn.classList.add('playing');
-                    musicBtn.innerText = "⏸ Music Off";
+                    music.play().then(() => {
+                        musicBtn.classList.add('playing');
+                        musicBtn.innerText = "⏸ Music Off";
+                    }).catch(error => {
+                        console.error("Audio play failed:", error);
+                        alert("음악을 재생할 수 없습니다. 잠시 후 다시 시도해주세요!");
+                    });
                 } else {
                     music.pause();
                     musicBtn.classList.remove('playing');
                     musicBtn.innerText = "🎵 Music On";
                 }
             });
+
+            // Handle potential loading errors
+            music.onerror = () => {
+                console.error("Audio failed to load");
+                musicBtn.innerText = "⚠️ Music Error";
+            };
         }
     }
 });
