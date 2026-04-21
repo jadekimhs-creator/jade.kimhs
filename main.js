@@ -63,4 +63,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (numbersContainer) {
         generateNumbers();
     }
+
+    // Video Playlist Logic
+    const videoItems = document.querySelectorAll('.video-item');
+    const mainVideo = document.getElementById('main-video');
+
+    if (videoItems.length > 0 && mainVideo) {
+        videoItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const videoId = item.getAttribute('data-video');
+                mainVideo.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                
+                // Update active class
+                videoItems.forEach(v => v.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+    }
 });

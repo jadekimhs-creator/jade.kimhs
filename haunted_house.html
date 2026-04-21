@@ -8,11 +8,30 @@
 </head>
 <body>
     <div id="app">
-        <h1>👻 폐가 탐험 안내 👻</h1>
-        <p>안녕하세요! 여자친구분께서 좋아하시는 폐가에 대한 정보입니다.</p>
+        <h1>👻 폐가 탐험 인기 영상 👻</h1>
+        <p>인기 있는 폐가 탐험 영상들을 모아보았습니다. 클릭하여 시청하세요!</p>
         
         <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/jftwwvksP7g" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe id="main-video" src="https://www.youtube.com/embed/jftwwvksP7g" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="video-playlist">
+            <div class="video-item active" data-video="jftwwvksP7g">
+                <img src="https://img.youtube.com/vi/jftwwvksP7g/mqdefault.jpg" alt="Video 1">
+                <span>[폐가] 곤지암 정신병원 실제 탐험</span>
+            </div>
+            <div class="video-item" data-video="YpI4oZ8-2XU">
+                <img src="https://img.youtube.com/vi/YpI4oZ8-2XU/mqdefault.jpg" alt="Video 2">
+                <span>[흉가] 영덕 흉가의 진실 - Ha Sisters</span>
+            </div>
+            <div class="video-item" data-video="7n39k-h-Z3g">
+                <img src="https://img.youtube.com/vi/7n39k-h-Z3g/mqdefault.jpg" alt="Video 3">
+                <span>[공포] 늘봄가든 괴담과 탐험</span>
+            </div>
+            <div class="video-item" data-video="6n98R1wP-4k">
+                <img src="https://img.youtube.com/vi/6n98R1wP-4k/mqdefault.jpg" alt="Video 4">
+                <span>[레전드] 도사우치 - 역대급 폐가 발견</span>
+            </div>
         </div>
 
         <div class="precautions">
