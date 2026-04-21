@@ -1,31 +1,66 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const numbersContainer = document.getElementById('numbers');
-    const generateBtn = document.getElementById('generate-btn');
+    // Theme Toggle Logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const currentTheme = localStorage.getItem('theme');
 
-    function generateLottoNumbers() {
+    if (currentTheme === 'light') {
+        document.body.classList.add('light-mode');
+        if (themeToggle) themeToggle.textContent = '🌙';
+    }
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            let theme = 'dark';
+            if (document.body.classList.contains('light-mode')) {
+                theme = 'light';
+                themeToggle.textContent = '🌙';
+            } else {
+                themeToggle.textContent = '☀️';
+            }
+            localStorage.setItem('theme', theme);
+        });
+    }
+
+    // Lotto Logic
+    const generateBtn = document.getElementById('generate-btn');
+    const numbersContainer = document.getElementById('numbers');
+
+    if (generateBtn) {
+        generateBtn.addEventListener('click', () => {
+            generateNumbers();
+        });
+    }
+
+    function generateNumbers() {
+        if (!numbersContainer) return;
         const numbers = new Set();
         while (numbers.size < 6) {
-            const randomNumber = Math.floor(Math.random() * 45) + 1;
-            numbers.add(randomNumber);
+            const randomNum = Math.floor(Math.random() * 45) + 1;
+            numbers.add(randomNum);
         }
-        return Array.from(numbers).sort((a, b) => a - b);
+
+        const sortedNumbers = Array.from(numbers).sort((a, b) => a - b);
+        displayNumbers(sortedNumbers);
+    }
+
+    function displayNumber(number, index) {
+        const numberElement = document.createElement('div');
+        numberElement.classList.add('number');
+        numberElement.textContent = number;
+        numberElement.style.animationDelay = `${index * 100}ms`;
+        numbersContainer.appendChild(numberElement);
     }
 
     function displayNumbers(numbers) {
         numbersContainer.innerHTML = '';
-        numbers.forEach(number => {
-            const ball = document.createElement('div');
-            ball.className = 'ball';
-            ball.textContent = number;
-            numbersContainer.appendChild(ball);
+        numbers.forEach((number, index) => {
+            displayNumber(number, index);
         });
     }
 
-    generateBtn.addEventListener('click', () => {
-        const lottoNumbers = generateLottoNumbers();
-        displayNumbers(lottoNumbers);
-    });
-
-    // Initial generation
-    displayNumbers(generateLottoNumbers());
+    // Initial generation for lotto page
+    if (numbersContainer) {
+        generateNumbers();
+    }
 });
