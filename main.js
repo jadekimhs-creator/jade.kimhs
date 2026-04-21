@@ -93,4 +93,41 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
     }
+
+    // Gallery Image Modal Logic
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('expandedImg');
+    const galleryImages = document.querySelectorAll('.gallery-item img');
+    const closeModal = document.querySelector('.close');
+
+    if (modal && modalImg && galleryImages.length > 0) {
+        galleryImages.forEach(img => {
+            img.addEventListener('click', () => {
+                modal.style.display = "block";
+                modalImg.src = img.src;
+            });
+        });
+
+        const closeFunc = () => {
+            modal.style.display = "none";
+        };
+
+        if (closeModal) {
+            closeModal.addEventListener('click', closeFunc);
+        }
+
+        // Close when clicking background
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeFunc();
+            }
+        });
+
+        // Close with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape" && modal.style.display === "block") {
+                closeFunc();
+            }
+        });
+    }
 });
