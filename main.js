@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --------------------------------------------------
-    // 1. Theme Toggle Logic
+    // 1. Theme Toggle Logic (기존 유지)
     // --------------------------------------------------
     const themeToggle = document.getElementById('theme-toggle');
     const currentTheme = localStorage.getItem('theme');
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --------------------------------------------------
-    // 2. Lotto Logic
+    // 2. Lotto Logic (기존 유지)
     // --------------------------------------------------
     const generateBtn = document.getElementById('generate-btn');
     const numbersContainer = document.getElementById('numbers');
@@ -48,28 +48,24 @@ document.addEventListener('DOMContentLoaded', () => {
         displayNumbers(sortedNumbers);
     }
 
-    function displayNumber(number, index) {
-        const numberElement = document.createElement('div');
-        numberElement.classList.add('number');
-        numberElement.textContent = number;
-        numberElement.style.animationDelay = `${index * 100}ms`;
-        numbersContainer.appendChild(numberElement);
-    }
-
     function displayNumbers(numbers) {
+        if (!numbersContainer) return;
         numbersContainer.innerHTML = '';
         numbers.forEach((number, index) => {
-            displayNumber(number, index);
+            const numberElement = document.createElement('div');
+            numberElement.classList.add('number');
+            numberElement.textContent = number;
+            numberElement.style.animationDelay = `${index * 100}ms`;
+            numbersContainer.appendChild(numberElement);
         });
     }
 
-    // Initial generation for lotto page
     if (numbersContainer) {
         generateNumbers();
     }
 
     // --------------------------------------------------
-    // 3. Video Playlist Logic
+    // 3. Video Playlist Logic (Haunted House - 기존 유지)
     // --------------------------------------------------
     var videoItems = document.querySelectorAll('.video-item');
     var mainVideo = document.getElementById('main-video');
@@ -77,23 +73,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (videoItems.length > 0 && mainVideo) {
         for (var i = 0; i < videoItems.length; i++) {
             videoItems[i].onclick = function(e) {
-                // If the user clicked the link, let it open in a new tab
                 if (e.target.tagName.toLowerCase() === 'a' || e.target.className.indexOf('yt-link') !== -1) {
                     return;
                 }
-
                 var videoId = this.getAttribute('data-video');
                 if (videoId) {
-                    // Update iframe src
                     mainVideo.src = 'https://www.youtube.com/embed/' + videoId;
-                    
-                    // Update active state in UI
                     for (var j = 0; j < videoItems.length; j++) {
                         videoItems[j].classList.remove('active');
                     }
                     this.classList.add('active');
-                    
-                    // Scroll to top of video
                     mainVideo.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             };
@@ -101,72 +90,97 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --------------------------------------------------
-    // 4. Gallery Image Modal Logic
+    // 4. 가상 악기(Synthesizer) 로직 - 파일 없이 소리 생성 (신규 적용)
     // --------------------------------------------------
-    const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('expandedImg');
-    const galleryImages = document.querySelectorAll('.gallery-item img');
-    const closeModal = document.querySelector('.close');
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+    let isPlaying = false;
+    let noteInterval = null;
 
-    if (modal && modalImg && galleryImages.length > 0) {
-        galleryImages.forEach(img => {
-            img.addEventListener('click', () => {
-                modal.style.display = "block";
-                modalImg.src = img.src;
-            });
-        });
+    const melody = [
+        261.63, 329.63, 392.00, 493.88, // Cmaj7
+        349.23, 440.00, 523.25, 659.25, // Fmaj7
+        293.66, 349.23, 440.00, 587.33, // Dm7
+        392.00, 493.88, 587.33, 783.99  // G7
+    ];
+    let currentNote = 0;
 
-        const closeFunc = () => {
-            modal.style.display = "none";
-        };
+    function playTone() {
+        if (!audioCtx) audioCtx = new AudioContext();
+        
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
 
-        if (closeModal) {
-            closeModal.addEventListener('click', closeFunc);
-        }
+        oscillator.type = 'sine'; 
+        oscillator.frequency.setValueAtTime(melody[currentNote], audioCtx.currentTime);
+        
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.1);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 2);
 
-        // Close when clicking background
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeFunc();
-            }
-        });
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
 
-        // Close with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === "Escape" && modal.style.display === "block") {
-                closeFunc();
-            }
-        });
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 2);
+
+        currentNote = (currentNote + 1) % melody.length;
     }
 
     // --------------------------------------------------
-    // 5. Our Journey Movie (Cinematic Slideshow) & Music
+    // 5. Music Toggle 버튼 제어 (신규 적용)
+    // --------------------------------------------------
+    const musicBtn = document.getElementById('music-toggle');
+    
+    function toggleMusic() {
+        if (!isPlaying) {
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            noteInterval = setInterval(playTone, 2000);
+            isPlaying = true;
+            if (musicBtn) {
+                musicBtn.innerText = "🔊 Music Off";
+                musicBtn.classList.add('playing');
+            }
+        } else {
+            clearInterval(noteInterval);
+            isPlaying = false;
+            if (musicBtn) {
+                musicBtn.innerText = "🎵 Music On";
+                musicBtn.classList.remove('playing');
+            }
+        }
+    }
+
+    if (musicBtn) {
+        musicBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMusic();
+        });
+
+        document.body.addEventListener('click', () => {
+            if (!isPlaying) toggleMusic();
+        }, { once: true });
+    }
+
+    // --------------------------------------------------
+    // 6. Our Journey Movie (슬라이드쇼 로직 - 신규 적용)
     // --------------------------------------------------
     const movieSlideshow = document.getElementById('slideshow');
     const movieText = document.getElementById('movie-text');
-    const music = document.getElementById('bg-music');
-    const musicBtn = document.getElementById('music-toggle');
     
     if (movieSlideshow) {
         const movieImages = [
-            'img/KakaoTalk_20260422_000845968.jpg',
-            'img/KakaoTalk_20260422_000845968_01.jpg',
-            'img/KakaoTalk_20260422_000845968_02.jpg',
-            'img/KakaoTalk_20260422_000845968_03.jpg',
-            'img/KakaoTalk_20260422_000845968_04.jpg',
-            'img/KakaoTalk_20260422_000845968_05.jpg',
-            'img/KakaoTalk_20260422_000845968_06.jpg',
-            'img/KakaoTalk_20260422_000845968_07.jpg',
-            'img/KakaoTalk_20260422_000845968_08.jpg',
-            'img/KakaoTalk_20260422_000845968_09.jpg',
-            'img/KakaoTalk_20260422_000845968_10.jpg',
-            'img/KakaoTalk_20260422_000845968_11.jpg',
-            'img/KakaoTalk_20260422_000845968_12.jpg',
-            'img/KakaoTalk_20260422_000845968_13.jpg',
-            'img/KakaoTalk_20260422_000845968_14.jpg',
-            'img/KakaoTalk_20260422_000845968_15.jpg',
-            'img/KakaoTalk_20260422_000845968_16.jpg',
-            'img/KakaoTalk_20260422_000845968_17.jpg'
+            'img/KakaoTalk_20260422_000845968.jpg', 'img/KakaoTalk_20260422_000845968_01.jpg',
+            'img/KakaoTalk_20260422_000845968_02.jpg', 'img/KakaoTalk_20260422_000845968_03.jpg',
+            'img/KakaoTalk_20260422_000845968_04.jpg', 'img/KakaoTalk_20260422_000845968_05.jpg',
+            'img/KakaoTalk_20260422_000845968_06.jpg', 'img/KakaoTalk_20260422_000845968_07.jpg',
+            'img/KakaoTalk_20260422_000845968_08.jpg', 'img/KakaoTalk_20260422_000845968_09.jpg',
+            'img/KakaoTalk_20260422_000845968_10.jpg', 'img/KakaoTalk_20260422_000845968_11.jpg',
+            'img/KakaoTalk_20260422_000845968_12.jpg', 'img/KakaoTalk_20260422_000845968_13.jpg',
+            'img/KakaoTalk_20260422_000845968_14.jpg', 'img/KakaoTalk_20260422_000845968_15.jpg',
+            'img/KakaoTalk_20260422_000845968_16.jpg', 'img/KakaoTalk_20260422_000845968_17.jpg'
         ];
 
         const messages = [
@@ -175,16 +189,13 @@ document.addEventListener('DOMContentLoaded', () => {
             "우리는 조금씩 서로에게 물들어갔죠",
             "함께 걷는 이 길이 너무나 소중해요",
             "우리의 매 순간이 영화 같은 기적",
-            "앞으로도 더 많은 추억을 쌓아가요",
-            "사랑한다는 말보다 더 깊은 진심으로",
-            "우리의 이야기는 현재진행형입니다."
+            "앞으로도 더 많은 추억을 쌓아가요"
         ];
 
-        // Create slides
         movieImages.forEach((src) => {
             const slide = document.createElement('div');
             slide.className = 'slide';
-            slide.style.backgroundImage = `url(${src})`;
+            slide.style.backgroundImage = `url('${src}')`;
             movieSlideshow.appendChild(slide);
         });
 
@@ -194,67 +205,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function updateMovieSlide() {
             if (slides.length === 0) return;
-            
             slides.forEach(s => s.classList.remove('active'));
             slides[currentIdx].classList.add('active');
             
             if (currentIdx % 2 === 0) {
-                movieText.classList.remove('active');
-                setTimeout(() => {
-                    movieText.innerText = messages[messageIdx];
-                    movieText.classList.add('active');
-                    messageIdx = (messageIdx + 1) % messages.length;
-                }, 1000);
+                if (movieText) {
+                    movieText.classList.remove('active');
+                    setTimeout(() => {
+                        movieText.innerText = messages[messageIdx] || "우리의 이야기는 계속됩니다.";
+                        movieText.classList.add('active');
+                        messageIdx = (messageIdx + 1) % messages.length;
+                    }, 1000);
+                }
             }
             currentIdx = (currentIdx + 1) % slides.length;
         }
 
         updateMovieSlide();
         setInterval(updateMovieSlide, 5000);
-        
-        // Music toggle logic (개선된 부분)
-        if (musicBtn && music) {
-            music.volume = 0.5; // Set volume to 0.5
-            
-            // 재생 함수 분리
-            const playMusic = () => {
-                music.play().then(() => {
-                    musicBtn.classList.add('playing');
-                    musicBtn.innerText = "🔊 Music Off";
-                }).catch(error => {
-                    console.warn("음악 자동 재생 대기 중이거나 에러 발생:", error);
-                });
-            };
+    }
 
-            // 정지 함수 분리
-            const pauseMusic = () => {
-                music.pause();
-                musicBtn.classList.remove('playing');
-                musicBtn.innerText = "🎵 Music On";
-            };
+    // --------------------------------------------------
+    // 7. Gallery Modal 로직 (신규 적용 및 기존 유지)
+    // --------------------------------------------------
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('expandedImg');
+    const galleryImages = document.querySelectorAll('.gallery-item img');
 
-            // 1. 버튼 클릭 시 재생/정지
-            musicBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // 배경 클릭 이벤트와 겹치지 않게 방지
-                if (music.paused) {
-                    playMusic();
-                } else {
-                    pauseMusic();
-                }
+    if (modal && modalImg) {
+        galleryImages.forEach(img => {
+            img.addEventListener('click', () => {
+                modal.style.display = "block";
+                modalImg.src = img.src;
             });
-
-            // 2. 브라우저 정책 우회: 사용자가 화면 아무 곳이나 처음 클릭했을 때 음악 재생
-            document.body.addEventListener('click', () => {
-                if (music.paused && !musicBtn.classList.contains('playing')) {
-                    playMusic();
-                }
-            }, { once: true }); // 최초 1회만 작동
-
-            // Handle potential loading errors
-            music.onerror = () => {
-                console.error("Audio failed to load. 음원 링크를 확인해주세요.");
-                musicBtn.innerText = "⚠️ Music Error";
-            };
-        }
+        });
+        document.querySelector('.close')?.addEventListener('click', () => modal.style.display = "none");
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = "none"; });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape" && modal.style.display === "block") {
+                modal.style.display = "none";
+            }
+        });
     }
 });
