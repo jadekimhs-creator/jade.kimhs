@@ -69,21 +69,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainVideo = document.getElementById('main-video');
 
     if (videoItems.length > 0 && mainVideo) {
-        videoItems.forEach(item => {
+        videoItems.forEach(function(item) {
             item.addEventListener('click', function(e) {
                 // If the user clicked the link, let it open in a new tab
-                if (e.target.closest('.yt-link')) return;
+                if (e.target.classList.contains('yt-link')) {
+                    return;
+                }
 
-                const videoId = this.getAttribute('data-video');
+                const videoId = item.getAttribute('data-video');
                 if (videoId) {
                     // Update iframe src
-                    mainVideo.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+                    mainVideo.setAttribute('src', 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0');
                     
                     // Update active state in UI
-                    videoItems.forEach(v => v.classList.remove('active'));
-                    this.classList.add('active');
+                    videoItems.forEach(function(v) {
+                        v.classList.remove('active');
+                    });
+                    item.classList.add('active');
                     
-                    // Scroll to top of video on mobile
+                    // Scroll to top of video
                     mainVideo.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             });
