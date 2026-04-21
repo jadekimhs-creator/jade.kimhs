@@ -65,32 +65,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Video Playlist Logic
-    const videoItems = document.querySelectorAll('.video-item');
-    const mainVideo = document.getElementById('main-video');
+    var videoItems = document.querySelectorAll('.video-item');
+    var mainVideo = document.getElementById('main-video');
 
     if (videoItems.length > 0 && mainVideo) {
-        videoItems.forEach(function(item) {
-            item.onclick = function(e) {
-                // Ignore clicks on the external YouTube link
-                if (e.target.tagName.toLowerCase() === 'a' || e.target.classList.contains('yt-link')) {
+        for (var i = 0; i < videoItems.length; i++) {
+            videoItems[i].onclick = function(e) {
+                // If the user clicked the link, let it open in a new tab
+                if (e.target.tagName.toLowerCase() === 'a' || e.target.className.indexOf('yt-link') !== -1) {
                     return;
                 }
 
-                const videoId = item.getAttribute('data-video');
+                var videoId = this.getAttribute('data-video');
                 if (videoId) {
-                    // Update iframe src - removed autoplay to ensure it loads in all browsers
-                    mainVideo.src = 'https://www.youtube.com/embed/' + videoId + '?rel=0';
+                    // Update iframe src
+                    mainVideo.src = 'https://www.youtube.com/embed/' + videoId;
                     
                     // Update active state in UI
-                    videoItems.forEach(function(v) {
-                        v.classList.remove('active');
-                    });
-                    item.classList.add('active');
+                    for (var j = 0; j < videoItems.length; j++) {
+                        videoItems[j].classList.remove('active');
+                    }
+                    this.classList.add('active');
                     
                     // Scroll to top of video
                     mainVideo.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             };
-        });
+        }
     }
 });
