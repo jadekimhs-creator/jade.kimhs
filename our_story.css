@@ -93,3 +93,22 @@ h2 {
 .gallery-item:hover img {
     transform: scale(1.05);
 }
+
+.back-link {
+    display: inline-block;
+    margin-top: 40px;
+    padding: 12px 25px;
+    background-color: #ffb6c1;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(255, 182, 193, 0.4);
+}
+
+.back-link:hover {
+    background-color: #ff69b4;
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(255, 105, 180, 0.5);
+}
