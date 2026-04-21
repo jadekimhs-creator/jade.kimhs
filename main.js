@@ -70,7 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (videoItems.length > 0 && mainVideo) {
         videoItems.forEach(item => {
-            item.addEventListener('click', () => {
+            item.addEventListener('click', (e) => {
+                // Do not switch if the YouTube link was clicked
+                if (e.target.classList.contains('yt-link')) return;
+
                 const videoId = item.getAttribute('data-video');
                 mainVideo.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
                 
