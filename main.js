@@ -90,61 +90,69 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --------------------------------------------------
-    // 4. 가상 악기(Synthesizer) 로직 - 파일 없이 소리 생성 (신규 적용)
+    // 4. 시네마틱 앰비언트 합성기 (파일 없이 분위기 연출 - 신규 적용)
     // --------------------------------------------------
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
     let isPlaying = false;
-    let noteInterval = null;
+    let intervalId = null;
 
-    const melody = [
-        261.63, 329.63, 392.00, 493.88, // Cmaj7
-        349.23, 440.00, 523.25, 659.25, // Fmaj7
-        293.66, 349.23, 440.00, 587.33, // Dm7
-        392.00, 493.88, 587.33, 783.99  // G7
+    // 감성적인 코드 진행 (Cmaj7 - Am7 - Fmaj7 - G7sus4)
+    const chords = [
+        [261.63, 329.63, 392.00, 493.88], // Cmaj7 (도 미 솔 시)
+        [220.00, 261.63, 329.63, 392.00], // Am7 (라 도 미 솔)
+        [174.61, 220.00, 261.63, 329.63], // Fmaj7 (파 라 도 미)
+        [196.00, 293.66, 392.00, 440.00]  // G7sus4 (솔 레 솔 라)
     ];
-    let currentNote = 0;
+    let chordIdx = 0;
 
-    function playTone() {
+    function playCinematicChord() {
         if (!audioCtx) audioCtx = new AudioContext();
         
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-
-        oscillator.type = 'sine'; 
-        oscillator.frequency.setValueAtTime(melody[currentNote], audioCtx.currentTime);
+        const now = audioCtx.currentTime;
+        const chord = chords[chordIdx];
         
-        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.1);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 2);
+        // 화음의 각 음을 부드럽게 생성
+        chord.forEach((freq, i) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
 
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
+            // 부드러운 사인파와 삼각형파를 섞어 따뜻한 소리 구현
+            osc.type = i === 0 ? 'triangle' : 'sine';
+            osc.frequency.setValueAtTime(freq, now);
 
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 2);
+            // 볼륨 조절: 서서히 커졌다가 아주 길게 사라짐 (잔향 효과)
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.05, now + 1 + (i * 0.2)); 
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 6);
 
-        currentNote = (currentNote + 1) % melody.length;
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(now);
+            osc.stop(now + 6);
+        });
+
+        chordIdx = (chordIdx + 1) % chords.length;
     }
 
     // --------------------------------------------------
-    // 5. Music Toggle 버튼 제어 (신규 적용)
+    // 5. 음악 제어 버튼 (신규 적용)
     // --------------------------------------------------
     const musicBtn = document.getElementById('music-toggle');
     
-    function toggleMusic() {
+    function startAmbientMusic() {
         if (!isPlaying) {
-            if (audioCtx && audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            noteInterval = setInterval(playTone, 2000);
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            playCinematicChord(); // 즉시 시작
+            intervalId = setInterval(playCinematicChord, 4000); // 4초마다 코드 전환
             isPlaying = true;
             if (musicBtn) {
                 musicBtn.innerText = "🔊 Music Off";
                 musicBtn.classList.add('playing');
             }
         } else {
-            clearInterval(noteInterval);
+            clearInterval(intervalId);
             isPlaying = false;
             if (musicBtn) {
                 musicBtn.innerText = "🎵 Music On";
@@ -156,16 +164,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (musicBtn) {
         musicBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            toggleMusic();
+            startAmbientMusic();
         });
-
         document.body.addEventListener('click', () => {
-            if (!isPlaying) toggleMusic();
+            if (!isPlaying) startAmbientMusic();
         }, { once: true });
     }
 
     // --------------------------------------------------
-    // 6. Our Journey Movie (슬라이드쇼 로직 - 신규 적용)
+    // 6. 슬라이드쇼 및 갤러리 로직 (신규 적용)
     // --------------------------------------------------
     const movieSlideshow = document.getElementById('slideshow');
     const movieText = document.getElementById('movie-text');
@@ -189,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "우리는 조금씩 서로에게 물들어갔죠",
             "함께 걷는 이 길이 너무나 소중해요",
             "우리의 매 순간이 영화 같은 기적",
-            "앞으로도 더 많은 추억을 쌓아가요"
+            "더 많은 추억을 위해, 사랑합니다."
         ];
 
         movieImages.forEach((src) => {
@@ -225,9 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(updateMovieSlide, 5000);
     }
 
-    // --------------------------------------------------
-    // 7. Gallery Modal 로직 (신규 적용 및 기존 유지)
-    // --------------------------------------------------
+    // 갤러리 모달
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('expandedImg');
     const galleryImages = document.querySelectorAll('.gallery-item img');
