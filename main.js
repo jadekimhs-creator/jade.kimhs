@@ -200,15 +200,17 @@ document.addEventListener('DOMContentLoaded', () => {
         updateMovieSlide();
         setInterval(updateMovieSlide, 5000);
         
+        // Music toggle logic
         if (musicBtn && music) {
+            music.volume = 0.5; // Set volume to 0.5
+            
             musicBtn.addEventListener('click', () => {
                 if (music.paused) {
                     music.play().then(() => {
                         musicBtn.classList.add('playing');
-                        musicBtn.innerText = "⏸ Music Off";
+                        musicBtn.innerText = "🔊 Music Off";
                     }).catch(error => {
-                        console.error("Audio play failed:", error);
-                        alert("음악을 재생할 수 없습니다. 잠시 후 다시 시도해주세요!");
+                        console.log("재생 실패:", error);
                     });
                 } else {
                     music.pause();
