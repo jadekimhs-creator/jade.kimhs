@@ -71,16 +71,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (videoItems.length > 0 && mainVideo) {
         videoItems.forEach(function(item) {
             item.onclick = function(e) {
-                // If the user clicked the link, let it open in a new tab
-                if (e.target.tagName.toLowerCase() === 'a' || e.target.parentElement.tagName.toLowerCase() === 'a') {
+                // Ignore clicks on the external YouTube link
+                if (e.target.tagName.toLowerCase() === 'a' || e.target.classList.contains('yt-link')) {
                     return;
                 }
 
                 const videoId = item.getAttribute('data-video');
                 if (videoId) {
-                    // Update iframe src
-                    const newUrl = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0';
-                    mainVideo.setAttribute('src', newUrl);
+                    // Update iframe src - removed autoplay to ensure it loads in all browsers
+                    mainVideo.src = 'https://www.youtube.com/embed/' + videoId + '?rel=0';
                     
                     // Update active state in UI
                     videoItems.forEach(function(v) {
