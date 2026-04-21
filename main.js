@@ -70,16 +70,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (videoItems.length > 0 && mainVideo) {
         videoItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                // Do not switch if the YouTube link was clicked
-                if (e.target.classList.contains('yt-link')) return;
+            item.addEventListener('click', function(e) {
+                // If the user clicked the link, let it open in a new tab
+                if (e.target.closest('.yt-link')) return;
 
-                const videoId = item.getAttribute('data-video');
-                mainVideo.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-                
-                // Update active class
-                videoItems.forEach(v => v.classList.remove('active'));
-                item.classList.add('active');
+                const videoId = this.getAttribute('data-video');
+                if (videoId) {
+                    // Update iframe src
+                    mainVideo.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+                    
+                    // Update active state in UI
+                    videoItems.forEach(v => v.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Scroll to top of video on mobile
+                    mainVideo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
             });
         });
     }
