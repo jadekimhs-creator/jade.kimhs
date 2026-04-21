@@ -201,22 +201,26 @@ h2 {
 }
 
 .back-link {
+    font-family: 'Nanum Myeongjo', serif;
     display: inline-block;
-    margin-top: 40px;
-    padding: 12px 25px;
-    background-color: #ffb6c1;
-    color: white;
+    margin-top: 60px;
+    padding: 15px 40px;
+    background-color: transparent;
+    color: #b8860b; /* Dark Goldenrod */
     text-decoration: none;
-    border-radius: 25px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(255, 182, 193, 0.4);
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    border: 1px solid #b8860b;
+    border-radius: 0; /* Minimalist square design */
+    transition: all 0.5s ease;
+    text-transform: uppercase;
 }
 
 .back-link:hover {
-    background-color: #ff69b4;
-    transform: scale(1.05);
-    box-shadow: 0 6px 15px rgba(255, 105, 180, 0.5);
+    background-color: #b8860b;
+    color: white;
+    letter-spacing: 4px; /* Elegant expansion effect */
+    box-shadow: 0 5px 15px rgba(184, 134, 11, 0.3);
 }
 
 /* Modal for image expansion */
