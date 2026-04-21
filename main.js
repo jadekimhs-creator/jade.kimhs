@@ -70,16 +70,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (videoItems.length > 0 && mainVideo) {
         videoItems.forEach(function(item) {
-            item.addEventListener('click', function(e) {
+            item.onclick = function(e) {
                 // If the user clicked the link, let it open in a new tab
-                if (e.target.classList.contains('yt-link')) {
+                if (e.target.tagName.toLowerCase() === 'a' || e.target.parentElement.tagName.toLowerCase() === 'a') {
                     return;
                 }
 
                 const videoId = item.getAttribute('data-video');
                 if (videoId) {
                     // Update iframe src
-                    mainVideo.setAttribute('src', 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0');
+                    const newUrl = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0';
+                    mainVideo.setAttribute('src', newUrl);
                     
                     // Update active state in UI
                     videoItems.forEach(function(v) {
@@ -90,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Scroll to top of video
                     mainVideo.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
-            });
+            };
         });
     }
 });
