@@ -130,4 +130,88 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Our Journey Movie (Cinematic Slideshow)
+    const movieSlideshow = document.getElementById('slideshow');
+    const movieText = document.getElementById('movie-text');
+    const music = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-toggle');
+    
+    if (movieSlideshow) {
+        const movieImages = [
+            'img/KakaoTalk_20260422_000845968.jpg',
+            'img/KakaoTalk_20260422_000845968_01.jpg',
+            'img/KakaoTalk_20260422_000845968_02.jpg',
+            'img/KakaoTalk_20260422_000845968_03.jpg',
+            'img/KakaoTalk_20260422_000845968_04.jpg',
+            'img/KakaoTalk_20260422_000845968_05.jpg',
+            'img/KakaoTalk_20260422_000845968_06.jpg',
+            'img/KakaoTalk_20260422_000845968_07.jpg',
+            'img/KakaoTalk_20260422_000845968_08.jpg',
+            'img/KakaoTalk_20260422_000845968_09.jpg',
+            'img/KakaoTalk_20260422_000845968_10.jpg',
+            'img/KakaoTalk_20260422_000845968_11.jpg',
+            'img/KakaoTalk_20260422_000845968_12.jpg',
+            'img/KakaoTalk_20260422_000845968_13.jpg',
+            'img/KakaoTalk_20260422_000845968_14.jpg',
+            'img/KakaoTalk_20260422_000845968_15.jpg',
+            'img/KakaoTalk_20260422_000845968_16.jpg',
+            'img/KakaoTalk_20260422_000845968_17.jpg'
+        ];
+
+        const messages = [
+            "우리의 소중한 기록들을 시작합니다...",
+            "함께 웃고 떠들던 그날의 기억",
+            "우리는 조금씩 서로에게 물들어갔죠",
+            "함께 걷는 이 길이 너무나 소중해요",
+            "우리의 매 순간이 영화 같은 기적",
+            "앞으로도 더 많은 추억을 쌓아가요",
+            "사랑한다는 말보다 더 깊은 진심으로",
+            "우리의 이야기는 현재진행형입니다."
+        ];
+
+        // Create slides
+        movieImages.forEach((src) => {
+            const slide = document.createElement('div');
+            slide.className = 'slide';
+            slide.style.backgroundImage = `url(${src})`;
+            movieSlideshow.appendChild(slide);
+        });
+
+        const slides = movieSlideshow.querySelectorAll('.slide');
+        let currentIdx = 0;
+        let messageIdx = 0;
+
+        function updateMovieSlide() {
+            slides.forEach(s => s.classList.remove('active'));
+            slides[currentIdx].classList.add('active');
+            
+            if (currentIdx % 2 === 0) {
+                movieText.classList.remove('active');
+                setTimeout(() => {
+                    movieText.innerText = messages[messageIdx];
+                    movieText.classList.add('active');
+                    messageIdx = (messageIdx + 1) % messages.length;
+                }, 1000);
+            }
+            currentIdx = (currentIdx + 1) % slides.length;
+        }
+
+        updateMovieSlide();
+        setInterval(updateMovieSlide, 5000);
+        
+        if (musicBtn && music) {
+            musicBtn.addEventListener('click', () => {
+                if (music.paused) {
+                    music.play();
+                    musicBtn.classList.add('playing');
+                    musicBtn.innerText = "⏸ Music Off";
+                } else {
+                    music.pause();
+                    musicBtn.classList.remove('playing');
+                    musicBtn.innerText = "🎵 Music On";
+                }
+            });
+        }
+    }
 });

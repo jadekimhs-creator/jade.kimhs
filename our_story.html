@@ -23,8 +23,26 @@
         </nav>
     </header>
 
-    <main id="gallery">
-        <section class="gallery-section">
+    <main>
+        <section id="timeline" class="timeline-section">
+            <h2>Our Journey Movie</h2>
+            <div class="movie-container">
+                <div id="slideshow">
+                    <!-- Images will be injected by JS -->
+                </div>
+                <div class="movie-overlay">
+                    <div id="movie-text">우리의 소중한 기록들...</div>
+                </div>
+                <div class="movie-controls">
+                    <button id="music-toggle" title="Music On/Off">🎵 Music</button>
+                </div>
+            </div>
+            <audio id="bg-music" loop>
+                <source src="https://www.chosic.com/wp-content/uploads/2021/04/Warm-Memories-Emotional-Inspiring-Piano.mp3" type="audio/mp3">
+            </audio>
+        </section>
+
+        <section id="gallery" class="gallery-section">
             <h2>Our Precious Moments</h2>
             <div class="gallery-grid">
                 <div class="gallery-item"><img src="img/KakaoTalk_20260422_000845968.jpg" alt="Precious Moment"></div>
