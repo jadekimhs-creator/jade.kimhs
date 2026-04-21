@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Theme Toggle Logic
+    // --------------------------------------------------
+    // 1. Theme Toggle Logic
+    // --------------------------------------------------
     const themeToggle = document.getElementById('theme-toggle');
     const currentTheme = localStorage.getItem('theme');
 
@@ -22,7 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Lotto Logic
+    // --------------------------------------------------
+    // 2. Lotto Logic
+    // --------------------------------------------------
     const generateBtn = document.getElementById('generate-btn');
     const numbersContainer = document.getElementById('numbers');
 
@@ -64,7 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
         generateNumbers();
     }
 
-    // Video Playlist Logic
+    // --------------------------------------------------
+    // 3. Video Playlist Logic
+    // --------------------------------------------------
     var videoItems = document.querySelectorAll('.video-item');
     var mainVideo = document.getElementById('main-video');
 
@@ -94,7 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Gallery Image Modal Logic
+    // --------------------------------------------------
+    // 4. Gallery Image Modal Logic
+    // --------------------------------------------------
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('expandedImg');
     const galleryImages = document.querySelectorAll('.gallery-item img');
@@ -131,7 +139,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Our Journey Movie (Cinematic Slideshow)
+    // --------------------------------------------------
+    // 5. Our Journey Movie (Cinematic Slideshow) & Music
+    // --------------------------------------------------
     const movieSlideshow = document.getElementById('slideshow');
     const movieText = document.getElementById('movie-text');
     const music = document.getElementById('bg-music');
@@ -183,6 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let messageIdx = 0;
 
         function updateMovieSlide() {
+            if (slides.length === 0) return;
+            
             slides.forEach(s => s.classList.remove('active'));
             slides[currentIdx].classList.add('active');
             
@@ -200,28 +212,47 @@ document.addEventListener('DOMContentLoaded', () => {
         updateMovieSlide();
         setInterval(updateMovieSlide, 5000);
         
-        // Music toggle logic
+        // Music toggle logic (개선된 부분)
         if (musicBtn && music) {
             music.volume = 0.5; // Set volume to 0.5
             
-            musicBtn.addEventListener('click', () => {
+            // 재생 함수 분리
+            const playMusic = () => {
+                music.play().then(() => {
+                    musicBtn.classList.add('playing');
+                    musicBtn.innerText = "🔊 Music Off";
+                }).catch(error => {
+                    console.warn("음악 자동 재생 대기 중이거나 에러 발생:", error);
+                });
+            };
+
+            // 정지 함수 분리
+            const pauseMusic = () => {
+                music.pause();
+                musicBtn.classList.remove('playing');
+                musicBtn.innerText = "🎵 Music On";
+            };
+
+            // 1. 버튼 클릭 시 재생/정지
+            musicBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // 배경 클릭 이벤트와 겹치지 않게 방지
                 if (music.paused) {
-                    music.play().then(() => {
-                        musicBtn.classList.add('playing');
-                        musicBtn.innerText = "🔊 Music Off";
-                    }).catch(error => {
-                        console.log("재생 실패:", error);
-                    });
+                    playMusic();
                 } else {
-                    music.pause();
-                    musicBtn.classList.remove('playing');
-                    musicBtn.innerText = "🎵 Music On";
+                    pauseMusic();
                 }
             });
 
+            // 2. 브라우저 정책 우회: 사용자가 화면 아무 곳이나 처음 클릭했을 때 음악 재생
+            document.body.addEventListener('click', () => {
+                if (music.paused && !musicBtn.classList.contains('playing')) {
+                    playMusic();
+                }
+            }, { once: true }); // 최초 1회만 작동
+
             // Handle potential loading errors
             music.onerror = () => {
-                console.error("Audio failed to load");
+                console.error("Audio failed to load. 음원 링크를 확인해주세요.");
                 musicBtn.innerText = "⚠️ Music Error";
             };
         }
