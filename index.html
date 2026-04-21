@@ -1,14 +1,24 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로젝트 선택</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+    <div id="app">
+        <h1>프로젝트 허브</h1>
+        <div class="project-container">
+            <a href="/lotto.html" class="project-card">
+                <h2><span style="font-family: Arial, sans-serif;">🎟️</span> 로또 번호 생성기</h2>
+                <p>행운의 번호를 뽑아보세요! 매주 새로운 기회에 도전하세요.</p>
+            </a>
+            <a href="/haunted_house.html" class="project-card">
+                <h2><span style="font-family: Arial, sans-serif;">👻</span> 폐가 탐험 안내</h2>
+                <p>정다운님과 함께 떠나는 오싹한 모험. 안전 수칙은 필수!</p>
+            </a>
+        </div>
+    </div>
 </body>
 </html>
