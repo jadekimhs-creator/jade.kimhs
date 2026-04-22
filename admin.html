@@ -38,6 +38,9 @@
                     <button class="nav-item" data-target="tab-guestbook">
                         <i data-lucide="message-square"></i> 방명록 관리
                     </button>
+                    <button class="nav-item" data-target="tab-bgm">
+                        <i data-lucide="music"></i> BGM 관리
+                    </button>
                     <button class="nav-item" data-target="tab-rsvp">
                         <i data-lucide="users"></i> 참석자 통계
                     </button>
@@ -111,6 +114,31 @@
                     </div>
                     <div class="guestbook-masonry" id="admin-guestbook-list">
                         <!-- 방명록 카드 렌더링 -->
+                    </div>
+                </section>
+
+                <!-- BGM 탭 -->
+                <section id="tab-bgm" class="tab-content">
+                    <div class="page-header">
+                        <h2>BGM 관리</h2>
+                        <p>청첩장 배경에 깔릴 음악(MP3)을 등록합니다. 음악은 1개만 설정되며 새로 올리면 덮어씌워집니다.</p>
+                    </div>
+                    <div class="card upload-card">
+                        <div class="upload-area">
+                            <i data-lucide="music" style="width:40px; height:40px; color:var(--accent); margin-bottom:10px;"></i>
+                            <input type="file" id="bgm-input" accept="audio/mp3, audio/mpeg">
+                            <p class="upload-hint">클릭하거나 MP3 파일을 이곳으로 드래그하세요</p>
+                            <button id="bgm-upload-btn" class="btn-primary mt-3" style="background-color: var(--accent);">BGM 업로드 / 변경</button>
+                        </div>
+                        <p id="bgm-upload-status" class="status-msg"></p>
+                    </div>
+
+                    <div class="card">
+                        <h3>현재 등록된 BGM 미리듣기</h3>
+                        <div id="bgm-preview-container" style="margin-top: 20px;">
+                            <!-- BGM 미리듣기 동적 렌더링 -->
+                            <p style="color:var(--text-muted);">현재 등록된 음악이 없습니다.</p>
+                        </div>
                     </div>
                 </section>
 

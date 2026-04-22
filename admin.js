@@ -18,6 +18,7 @@ supabase.auth.onAuthStateChange((event, session) => {
         loadFiles();
         loadGuestbook();
         loadRSVP();
+        loadBGMPreview();
     } else {
         loginSection.classList.remove('hidden');
         dashboardSection.classList.add('hidden');
@@ -62,6 +63,58 @@ uploadBtn.addEventListener('click', async () => {
     fileInput.value = '';
     loadFiles();
 });
+
+// Delete File
+async function deleteFile(path) {
+    if (!confirm('정말 삭제하시겠습니까?')) return;
+    const { error } = await supabase.storage.from('files').remove([path]);
+    if (!error) loadFiles();
+    else alert('삭제 오류: ' + error.message);
+}
+
+// BGM Upload
+const bgmInput = document.getElementById('bgm-input');
+const bgmUploadBtn = document.getElementById('bgm-upload-btn');
+const bgmUploadStatus = document.getElementById('bgm-upload-status');
+const bgmPreviewContainer = document.getElementById('bgm-preview-container');
+
+bgmUploadBtn.addEventListener('click', async () => {
+    const file = bgmInput.files[0];
+    if (!file) return alert('MP3 파일을 선택해주세요.');
+    
+    bgmUploadStatus.textContent = 'BGM 업로드 중...';
+    // 무조건 bgm.mp3 이름으로 덮어쓰기 (upsert: true)
+    const { error } = await supabase.storage.from('files').upload('bgm/bgm.mp3', file, {
+        upsert: true,
+        cacheControl: '0'
+    });
+    
+    if (error) {
+        console.error(error);
+        bgmUploadStatus.textContent = '업로드 오류 발생: ' + error.message;
+        return;
+    }
+    
+    bgmUploadStatus.textContent = 'BGM 업로드 완료!';
+    bgmInput.value = '';
+    loadBGMPreview();
+});
+
+// Load BGM Preview
+async function loadBGMPreview() {
+    const { data: publicUrlData } = supabase.storage.from('files').getPublicUrl('bgm/bgm.mp3');
+    // cache busting query param to force reload the new file
+    const audioUrl = publicUrlData.publicUrl + '?t=' + new Date().getTime();
+    
+    // Check if file exists by making a HEAD request or just putting it in the audio tag
+    bgmPreviewContainer.innerHTML = `
+        <audio controls style="width: 100%;">
+            <source src="${audioUrl}" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <button class="btn-delete-img" onclick="deleteFile('bgm/bgm.mp3'); setTimeout(loadBGMPreview, 1000);" style="margin-top: 10px;">BGM 삭제</button>
+    `;
+}
 
 // 탭 전환 로직
 document.querySelectorAll('.nav-item').forEach(btn => {
