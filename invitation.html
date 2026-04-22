@@ -712,7 +712,7 @@
             </div>
 
             <div class="intro-bottom">
-                <p class="wedding-date-text">2026년 4월 22일 수요일 오후 1시</p>
+                <p class="wedding-date-text" id="wedding-header-date">날짜를 불러오는 중...</p>
                 <p class="wedding-venue-text">송파두산위브</p>
 
                 <div class="dday-box reveal">
@@ -1032,6 +1032,12 @@
             }
 
             const calendarInfo = `${year}. ${String(month+1).padStart(2,'0')}. ${String(day).padStart(2,'0')}. (${WEEKDAY_KO[date.getDay()]}) ${ampm} ${h12}시`;
+
+            // 헤더 날짜 텍스트도 동시에 업데이트
+            const headerDate = document.getElementById('wedding-header-date');
+            if (headerDate) {
+                headerDate.textContent = `${year}년 ${month+1}월 ${day}일 ${WEEKDAY_KO[date.getDay()]}요일 ${ampm} ${h12}시`;
+            }
 
             document.getElementById('dynamic-calendar').innerHTML = `
                 <h3 class="calendar-month">${MONTH_EN[month]}</h3>
