@@ -3,132 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>우리의 소중한 초대</title>
+    <title>Invitation | 형식 & 다운</title>
     <link rel="stylesheet" href="invitation.css">
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <!-- Lucide Icons for a modern touch -->
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
     <div class="container">
+        <!-- Premium Intro Section -->
         <header class="header reveal">
-            <div class="top-line"></div>
-            <p class="top-date">2026 . 04 . 22</p>
-            <h1 class="title">The Wedding</h1>
-            <p class="names"><span>형식</span> <span class="amp">&</span> <span>다운</span></p>
-            <div class="bottom-line"></div>
+            <div class="top-date-premium">2026 / 04 / 22</div>
+            <h1 class="premium-title">Wedding Day</h1>
+            <div class="divider-diamond"></div>
+            <p class="premium-names">HYUNG SIK <span class="amp-thin">&</span> DA WOON</p>
         </header>
 
-        <section class="main-image reveal">
-            <div class="img-wrapper">
-                <img src="img/KakaoTalk_20260422_000845968.jpg" alt="Main Photo">
-                <div class="img-overlay"></div>
+        <!-- Signature Image Section -->
+        <section class="main-image-premium reveal">
+            <div class="img-frame">
+                <img src="img/KakaoTalk_20260422_000845968.jpg" alt="Wedding Main Image">
+            </div>
+            <p class="photo-caption">We are getting married</p>
+        </section>
+
+        <!-- Letter Section -->
+        <section class="letter-section reveal">
+            <div class="letter-content">
+                <h2 class="letter-title">초대합니다</h2>
+                <div class="letter-text">
+                    <p>곁에 있을 때 가장 나다운 모습이 되게 하는 사람,</p>
+                    <p>꿈을 이야기할 때 가장 반짝이는 눈으로 들어주는 사람.</p>
+                    <p>그 사람과 평생을 함께하려 합니다.</p>
+                    <br>
+                    <p>저희의 새로운 출발을</p>
+                    <p>함께 축복해주시면 감사하겠습니다.</p>
+                </div>
+                <div class="family-info">
+                    <p>신랑 <span>형식</span></p>
+                    <p>신부 <span>다운</span></p>
+                </div>
             </div>
         </section>
 
-        <section class="invitation-text reveal">
-            <div class="quote">“</div>
-            <p class="intro">
-                서로 다른 두 사람이 만나<br>
-                하나의 꿈을 꾸기 시작했습니다.<br>
-                저희의 소중한 시작의 자리에<br>
-                따뜻한 축복을 더해주시면 감사하겠습니다.
-            </p>
-            <div class="quote rotate">“</div>
-        </section>
-
-        <section class="gallery reveal">
-            <h2 class="section-title">Precious Moments</h2>
-            <div class="gallery-grid">
-                <div class="grid-item tall"><img src="img/KakaoTalk_20260422_000845968_01.jpg" alt="Gallery 1"></div>
-                <div class="grid-item"><img src="img/KakaoTalk_20260422_000845968_02.jpg" alt="Gallery 2"></div>
-                <div class="grid-item"><img src="img/KakaoTalk_20260422_000845968_03.jpg" alt="Gallery 3"></div>
-                <div class="grid-item wide"><img src="img/KakaoTalk_20260422_000845968_04.jpg" alt="Gallery 4"></div>
+        <!-- Minimal Gallery -->
+        <section class="gallery-premium reveal">
+            <h2 class="premium-section-title">Precious Gallery</h2>
+            <div class="gallery-stack">
+                <div class="stack-item"><img src="img/KakaoTalk_20260422_000845968_01.jpg" alt="01"></div>
+                <div class="stack-item offset"><img src="img/KakaoTalk_20260422_000845968_02.jpg" alt="02"></div>
+                <div class="stack-item"><img src="img/KakaoTalk_20260422_000845968_03.jpg" alt="03"></div>
+                <div class="stack-item wide-premium"><img src="img/KakaoTalk_20260422_000845968_04.jpg" alt="04"></div>
             </div>
         </section>
 
-        <section class="location reveal">
-            <h2 class="section-title">Location</h2>
-            <div class="location-info">
-                <h3 class="venue-name">송파두산위브</h3>
-                <p class="address">서울특별시 송파구 오금로 527</p>
+        <!-- Location with Elegant Map -->
+        <section class="location-premium reveal">
+            <h2 class="premium-section-title">Location</h2>
+            <div class="venue-details">
+                <h3 class="venue-name-premium">송파두산위브</h3>
+                <p class="venue-address-premium">서울특별시 송파구 오금로 527</p>
                 
-                <div class="map-container">
-                    <!-- Placeholder for Map Visual - Using a styled div to look professional -->
-                    <div class="map-placeholder">
-                        <i data-lucide="map-pin" class="map-icon"></i>
-                        <span>Naver Map Area</span>
+                <div class="map-premium">
+                    <div class="map-inner">
+                        <i data-lucide="map-pin" class="map-pin-icon"></i>
+                        <span>지도보기</span>
                     </div>
-                    <a href="https://map.naver.com/v5/search/%EC%86%A1%ED%8C%8C%EB%91%90%EC%82%B0%EC%9C%84%EB%B8%8C" target="_blank" class="map-btn">
-                        <i data-lucide="navigation"></i> 네이버 지도로 보기
-                    </a>
+                    <a href="https://map.naver.com/v5/search/%EC%86%A1%ED%8C%8C%EB%91%90%EC%82%B0%EC%9C%84%EB%B8%8C" target="_blank" class="naver-link">NAVER MAP</a>
                 </div>
 
-                <div class="transport">
-                    <div class="transport-item">
-                        <span class="label">지하철</span>
-                        <p>5호선 마천역 2번 출구 (도보 5분)</p>
+                <div class="guide-grid">
+                    <div class="guide-item">
+                        <h4>SUBWAY</h4>
+                        <p>5호선 마천역 2번 출구</p>
                     </div>
-                    <div class="transport-item">
-                        <span class="label">버스</span>
-                        <p>송파두산위브 정류장 하차<br>3315, 3316, 3318, 3416</p>
+                    <div class="guide-item">
+                        <h4>PARKING</h4>
+                        <p>단지 내 지하주차장 이용 가능</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="countdown reveal">
-            <div id="timer">
-                <div class="time-unit">
-                    <span id="days">00</span>
-                    <label>Days</label>
-                </div>
-                <div class="time-unit">
-                    <span id="hours">00</span>
-                    <label>Hours</label>
-                </div>
-                <div class="time-unit">
-                    <span id="minutes">00</span>
-                    <label>Mins</label>
-                </div>
+        <!-- Minimal Countdown -->
+        <section class="countdown-premium reveal">
+            <div class="countdown-label">TIME REMAINING</div>
+            <div id="premium-timer">
+                <div class="p-unit"><span id="p-days">00</span><small>DAYS</small></div>
+                <div class="p-unit"><span id="p-hours">00</span><small>HOURS</small></div>
+                <div class="p-unit"><span id="p-mins">00</span><small>MINS</small></div>
             </div>
         </section>
 
-        <footer class="footer reveal">
-            <p class="thank-you">Thank You</p>
-            <a href="index.html" class="home-btn">← Back to Main</a>
+        <footer class="footer-premium reveal">
+            <div class="final-message">SEE YOU SOON</div>
+            <a href="index.html" class="home-btn-premium">Main Page</a>
         </footer>
     </div>
 
     <script>
-        // Icons
         lucide.createIcons();
 
-        // Reveal Animation
-        const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('active');
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Countdown Timer
         const weddingDate = new Date("April 22, 2026 13:00:00").getTime();
-        const timer = setInterval(function() {
+        setInterval(() => {
             const now = new Date().getTime();
-            const distance = weddingDate - now;
-            
-            document.getElementById("days").innerHTML = Math.floor(distance / (1000 * 60 * 60 * 24));
-            document.getElementById("hours").innerHTML = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById("minutes").innerHTML = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            
-            if (distance < 0) {
-                clearInterval(timer);
-                document.getElementById("timer").innerHTML = "Wedding Day!";
-            }
+            const dist = weddingDate - now;
+            document.getElementById("p-days").innerText = Math.floor(dist / (1000 * 60 * 60 * 24));
+            document.getElementById("p-hours").innerText = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("p-mins").innerText = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
         }, 1000);
     </script>
 </body>
