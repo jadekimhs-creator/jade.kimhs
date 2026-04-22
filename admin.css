@@ -103,3 +103,75 @@ button:hover { background-color: #B3956D; }
 .delete-btn:hover {
     background-color: #d9363e;
 }
+
+/* 탭 스타일 */
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 10px;
+}
+.tab-btn {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-weight: normal;
+    padding: 10px 15px;
+    width: auto;
+    border-radius: 4px;
+}
+.tab-btn.active {
+    background-color: var(--primary);
+    color: #fff;
+    font-weight: bold;
+}
+.tab-content {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}
+
+/* 통계 및 테이블 스타일 */
+.rsvp-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.stat-box {
+    background: var(--bg);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--border);
+}
+.stat-label {
+    display: block;
+    font-size: 0.85em;
+    color: #666;
+    margin-bottom: 5px;
+}
+.stat-val {
+    font-size: 1.2em;
+}
+
+.rsvp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 0.9em;
+}
+.rsvp-table th, .rsvp-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+.rsvp-table th {
+    background-color: var(--bg);
+    font-weight: bold;
+}
+.rsvp-table tr:hover {
+    background-color: #f9f9f9;
+}

@@ -367,6 +367,95 @@
         .btn-back:hover {
             border-color: var(--accent-color);
         }
+
+        /* [추가 폼 스타일: 방명록, RSVP] */
+        .form-premium {
+            text-align: left;
+            margin-top: 30px;
+        }
+        .form-premium input, .form-premium textarea, .form-premium select {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            border-radius: 2px;
+            box-sizing: border-box;
+        }
+        .form-premium input:focus, .form-premium textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        .form-premium textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--accent-color);
+            color: #fff;
+            border: none;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            letter-spacing: 0.1em;
+        }
+        .btn-submit:hover {
+            background-color: #B3956D;
+        }
+
+        .guestbook-list {
+            text-align: left;
+            margin-top: 40px;
+            max-height: 400px;
+            overflow-y: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+        .gb-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .gb-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        .gb-name {
+            font-weight: 500;
+            color: var(--accent-color);
+        }
+        .gb-date {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+        .gb-msg {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-main);
+            white-space: pre-wrap;
+        }
+
+        /* RSVP 라디오 버튼 스타일 */
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -432,19 +521,9 @@
         <section class="section gallery-editorial reveal">
             <div class="divider"></div>
             <h2 class="section-label">Gallery</h2>
-            <div class="editorial-grid">
-                <div class="item-full">
-                    <img src="img/KakaoTalk_20260422_000845968_01.jpg" alt="" onerror="this.src='https://images.unsplash.com/photo-1606800052052-a08af7148866?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'">
-                </div>
-                <div class="item-half">
-                    <img src="img/KakaoTalk_20260422_000845968_02.jpg" alt="" onerror="this.src='https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'">
-                </div>
-                <div class="item-half">
-                    <img src="img/KakaoTalk_20260422_000845968_03.jpg" alt="" onerror="this.src='https://images.unsplash.com/photo-1520854221256-17451cc331bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'">
-                </div>
-                <div class="item-full">
-                    <img src="img/KakaoTalk_20260422_000845968_04.jpg" alt="" onerror="this.src='https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'">
-                </div>
+            <div class="editorial-grid" id="dynamic-gallery">
+                <!-- 이미지가 동적으로 여기에 추가됩니다 -->
+                <p style="grid-column: 1/-1; color: var(--text-light); font-size: 0.9rem;">사진을 불러오는 중입니다...</p>
             </div>
         </section>
 
@@ -478,13 +557,56 @@
             </div>
         </section>
 
+        <!-- 방명록 섹션 -->
+        <section class="section reveal" style="background-color: #FFFFFF;">
+            <div class="divider"></div>
+            <h2 class="section-label">Guestbook</h2>
+            <p style="font-size: 0.95rem; color: var(--text-light); margin-bottom: 20px;">축하의 메시지를 남겨주세요.</p>
+            
+            <form id="guestbook-form" class="form-premium">
+                <input type="text" id="gb-name" placeholder="이름" required>
+                <textarea id="gb-msg" placeholder="축하 메시지를 작성해주세요" required></textarea>
+                <button type="submit" class="btn-submit" id="gb-submit-btn">메시지 남기기</button>
+            </form>
+
+            <div class="guestbook-list" id="guestbook-list">
+                <!-- 방명록 동적 렌더링 -->
+            </div>
+        </section>
+
+        <!-- 참석 여부(RSVP) 섹션 -->
+        <section class="section reveal" style="background-color: var(--bg-color); border-top: 1px solid var(--border-color);">
+            <div class="divider"></div>
+            <h2 class="section-label">RSVP</h2>
+            <p style="font-size: 0.95rem; color: var(--text-light); margin-bottom: 20px;">참석 여부를 알려주시면<br>행사 준비에 큰 도움이 됩니다.</p>
+            
+            <form id="rsvp-form" class="form-premium">
+                <input type="text" id="rsvp-name" placeholder="참석자 성함" required>
+                
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="rsvp-attend" value="true" required> 참석
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="rsvp-attend" value="false" required> 불참
+                    </label>
+                </div>
+
+                <input type="number" id="rsvp-companion" placeholder="동반인 수 (본인 제외)" min="0" value="0" required>
+                
+                <button type="submit" class="btn-submit" id="rsvp-submit-btn">참석 여부 전달하기</button>
+            </form>
+        </section>
+
         <footer class="footer-premium reveal">
             <p class="final-thankyou">Thank You</p>
             <a href="#" class="btn-back">혼주에게 연락하기</a>
         </footer>
     </div>
 
-    <script>
+    <script type="module">
+        import { supabase } from './supabaseClient.js';
+
         lucide.createIcons();
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -493,8 +615,106 @@
                 }
             });
         }, { threshold: 0.15 });
-        
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // 갤러리 이미지 로드
+        async function loadGallery() {
+            const galleryDiv = document.getElementById('dynamic-gallery');
+            const { data, error } = await supabase.storage.from('files').list('uploads', { sortBy: { column: 'name', order: 'asc' } });
+            
+            if (error || !data || data.length === 0) {
+                galleryDiv.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-light); font-size: 0.9rem;">등록된 사진이 없습니다.</p>';
+                return;
+            }
+
+            galleryDiv.innerHTML = '';
+            const validFiles = data.filter(f => f.name !== '.emptyFolderPlaceholder');
+            
+            validFiles.forEach((file, index) => {
+                const { data: publicUrlData } = supabase.storage.from('files').getPublicUrl(`uploads/${file.name}`);
+                const img = document.createElement('img');
+                img.src = publicUrlData.publicUrl;
+                
+                const div = document.createElement('div');
+                // 모자이크 레이아웃 (첫번째는 크게, 다음 두개는 작게 등)
+                div.className = (index % 3 === 0) ? 'item-full' : 'item-half';
+                div.appendChild(img);
+                galleryDiv.appendChild(div);
+            });
+        }
+
+        // 방명록 로드
+        async function loadGuestbook() {
+            const gbList = document.getElementById('guestbook-list');
+            const { data, error } = await supabase.from('guestbook').select('*').order('created_at', { ascending: false });
+            
+            if (error) return;
+            gbList.innerHTML = '';
+            
+            data.forEach(item => {
+                const date = new Date(item.created_at).toLocaleDateString('ko-KR');
+                const div = document.createElement('div');
+                div.className = 'gb-item';
+                div.innerHTML = `
+                    <div class="gb-header">
+                        <span class="gb-name">${item.name}</span>
+                        <span class="gb-date">${date}</span>
+                    </div>
+                    <div class="gb-msg">${item.message}</div>
+                `;
+                gbList.appendChild(div);
+            });
+        }
+
+        // 방명록 등록
+        document.getElementById('guestbook-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('gb-submit-btn');
+            btn.textContent = '등록 중...';
+            btn.disabled = true;
+
+            const name = document.getElementById('gb-name').value;
+            const message = document.getElementById('gb-msg').value;
+
+            const { error } = await supabase.from('guestbook').insert([{ name, message }]);
+            
+            if (!error) {
+                alert('방명록이 등록되었습니다. 감사합니다!');
+                document.getElementById('guestbook-form').reset();
+                loadGuestbook();
+            } else {
+                alert('오류가 발생했습니다.');
+            }
+            btn.textContent = '메시지 남기기';
+            btn.disabled = false;
+        });
+
+        // 참석 여부(RSVP) 등록
+        document.getElementById('rsvp-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('rsvp-submit-btn');
+            btn.textContent = '전송 중...';
+            btn.disabled = true;
+
+            const name = document.getElementById('rsvp-name').value;
+            const attend = document.querySelector('input[name="rsvp-attend"]:checked').value === 'true';
+            const companion_count = parseInt(document.getElementById('rsvp-companion').value) || 0;
+
+            const { error } = await supabase.from('rsvp').insert([{ name, attend, companion_count }]);
+            
+            if (!error) {
+                alert('참석 여부가 전달되었습니다. 감사합니다!');
+                document.getElementById('rsvp-form').reset();
+            } else {
+                alert('오류가 발생했습니다.');
+            }
+            btn.textContent = '참석 여부 전달하기';
+            btn.disabled = false;
+        });
+
+        // 초기 로드
+        loadGallery();
+        loadGuestbook();
     </script>
 </body>
 </html>

@@ -27,7 +27,14 @@
                 <button id="logout-btn" class="btn-outline">로그아웃</button>
             </header>
 
-            <section class="card">
+            <div class="tabs">
+                <button class="tab-btn active" data-target="tab-gallery">갤러리 관리</button>
+                <button class="tab-btn" data-target="tab-guestbook">방명록 관리</button>
+                <button class="tab-btn" data-target="tab-rsvp">참석자 통계</button>
+            </div>
+
+            <!-- 갤러리 탭 -->
+            <section id="tab-gallery" class="card tab-content active">
                 <h3>파일 관리 (갤러리 업로드)</h3>
                 <div class="upload-area">
                     <input type="file" id="file-input" multiple accept="image/*">
@@ -37,6 +44,50 @@
                 
                 <h4>업로드된 파일 목록</h4>
                 <ul id="file-list" class="file-list"></ul>
+            </section>
+
+            <!-- 방명록 탭 -->
+            <section id="tab-guestbook" class="card tab-content">
+                <h3>방명록 관리</h3>
+                <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">삭제된 방명록은 복구할 수 없습니다.</p>
+                <ul id="admin-guestbook-list" class="file-list"></ul>
+            </section>
+
+            <!-- 참석자(RSVP) 탭 -->
+            <section id="tab-rsvp" class="card tab-content">
+                <h3>참석 여부 (RSVP) 현황</h3>
+                <div class="rsvp-stats">
+                    <div class="stat-box">
+                        <span class="stat-label">참석 의사</span>
+                        <strong class="stat-val text-primary" id="rsvp-attend-count">0</strong>명
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">동반인 합계</span>
+                        <strong class="stat-val text-primary" id="rsvp-companion-count">0</strong>명
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">총 참석 예상</span>
+                        <strong class="stat-val text-accent" id="rsvp-total-count" style="color:var(--primary); font-size: 1.5em;">0</strong>명
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">불참</span>
+                        <strong class="stat-val text-danger" id="rsvp-absent-count" style="color:#d9534f;">0</strong>명
+                    </div>
+                </div>
+                <h4>상세 명단</h4>
+                <div style="overflow-x: auto;">
+                    <table class="rsvp-table">
+                        <thead>
+                            <tr>
+                                <th>이름</th>
+                                <th>참석여부</th>
+                                <th>동반인</th>
+                                <th>제출일</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-rsvp-list"></tbody>
+                    </table>
+                </div>
             </section>
         </div>
     </div>
