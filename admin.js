@@ -63,59 +63,96 @@ uploadBtn.addEventListener('click', async () => {
     loadFiles();
 });
 
-// Load Files
-async function loadFiles() {
-    const { data, error } = await supabase.storage.from('files').list('uploads', {
-        limit: 100,
-        offset: 0,
-        sortBy: { column: 'name', order: 'asc' },
-    });
-    
-    fileList.innerHTML = '';
-    if (error) {
-        console.error(error);
-        return;
-    }
-    if (data.length === 0) {
-        fileList.innerHTML = '<li>업로드된 파일이 없습니다.</li>';
-        return;
-    }
-
-    data.forEach(file => {
-        if (file.name === '.emptyFolderPlaceholder') return;
-        const li = document.createElement('li');
-        li.textContent = file.name;
-        
-        const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = '삭제';
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.onclick = () => deleteFile(`uploads/${file.name}`);
-        
-        li.appendChild(deleteBtn);
-        fileList.appendChild(li);
-    });
-}
-
-// Delete File
-async function deleteFile(path) {
-    if (!confirm('정말 삭제하시겠습니까?')) return;
-    const { error } = await supabase.storage.from('files').remove([path]);
-    if (!error) loadFiles();
-    else alert('삭제 오류: ' + error.message);
-}
-
 // 탭 전환 로직
-document.querySelectorAll('.tab-btn').forEach(btn => {
+document.querySelectorAll('.nav-item').forEach(btn => {
+    if(btn.classList.contains('logout')) return;
+    
     btn.addEventListener('click', () => {
-        // 모든 탭 버튼 및 컨텐츠 비활성화
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         
-        // 클릭된 탭 활성화
         btn.classList.add('active');
         document.getElementById(btn.dataset.target).classList.add('active');
     });
 });
+
+// 전역 데이터 캐시 (Overview 업데이트용)
+let counts = { photos: 0, guestbooks: 0, rsvpTotal: 0 };
+
+function updateOverview() {
+    document.getElementById('overview-photo-count').textContent = counts.photos;
+    document.getElementById('overview-gb-count').textContent = counts.guestbooks;
+    document.getElementById('overview-rsvp-count').textContent = counts.rsvpTotal;
+}
+
+// 갤러리 로드 (그리드 카드 형태)
+async function loadFiles() {
+    const { data, error } = await supabase.storage.from('files').list('uploads', {
+        limit: 100, sortBy: { column: 'name', order: 'asc' }
+    });
+    
+    fileList.innerHTML = '';
+    if (error) return;
+    
+    const validFiles = data.filter(f => f.name !== '.emptyFolderPlaceholder');
+    counts.photos = validFiles.length;
+    updateOverview();
+
+    if (validFiles.length === 0) {
+        fileList.innerHTML = '<p style="color:#888; grid-column:1/-1;">업로드된 사진이 없습니다.</p>';
+        return;
+    }
+
+    validFiles.forEach(file => {
+        const { data: publicUrlData } = supabase.storage.from('files').getPublicUrl(`uploads/${file.name}`);
+        
+        const div = document.createElement('div');
+        div.className = 'gallery-item';
+        div.innerHTML = `
+            <img src="${publicUrlData.publicUrl}" alt="gallery image">
+            <div class="gallery-overlay">
+                <button class="btn-delete-img" onclick="deleteFile('uploads/${file.name}')">삭제</button>
+            </div>
+        `;
+        fileList.appendChild(div);
+    });
+}
+
+// 방명록 로드 (카드 형태)
+const adminGbList = document.getElementById('admin-guestbook-list');
+
+async function loadGuestbook() {
+    const { data, error } = await supabase.from('guestbook').select('*').order('created_at', { ascending: false });
+    
+    adminGbList.innerHTML = '';
+    if (error) return;
+    
+    counts.guestbooks = data.length;
+    updateOverview();
+
+    if (data.length === 0) {
+        adminGbList.innerHTML = '<p style="color:#888; grid-column:1/-1;">등록된 방명록이 없습니다.</p>';
+        return;
+    }
+
+    data.forEach(item => {
+        const date = new Date(item.created_at).toLocaleString('ko-KR');
+        const div = document.createElement('div');
+        div.className = 'gb-card';
+        div.innerHTML = `
+            <div class="gb-card-header">
+                <div>
+                    <div class="gb-card-name">${item.name}</div>
+                    <div class="gb-card-date">${date}</div>
+                </div>
+            </div>
+            <div class="gb-card-msg">${item.message}</div>
+            <button class="btn-delete-gb" onclick="deleteGuestbook('${item.id}')">삭제</button>
+            <div style="clear:both;"></div>
+        `;
+        adminGbList.appendChild(div);
+    });
+}
 
 // 방명록 관리
 const adminGbList = document.getElementById('admin-guestbook-list');
@@ -172,10 +209,7 @@ async function loadRSVP() {
     const { data, error } = await supabase.from('rsvp').select('*').order('created_at', { ascending: false });
     
     adminRsvpList.innerHTML = '';
-    if (error) {
-        console.error(error);
-        return;
-    }
+    if (error) return;
 
     let attendCount = 0;
     let companionTotal = 0;
@@ -192,25 +226,32 @@ async function loadRSVP() {
         const date = new Date(item.created_at).toLocaleDateString('ko-KR');
         const tr = document.createElement('tr');
         
-        const statusStr = item.attend ? '<span style="color:var(--primary);font-weight:bold;">참석</span>' : '<span style="color:#d9534f;">불참</span>';
-        const companionStr = item.attend ? `${item.companion_count}명` : '-';
+        const statusBadge = item.attend ? '<span class="badge attend">참석</span>' : '<span class="badge absent">불참</span>';
+        const companionStr = item.attend && item.companion_count > 0 ? `${item.companion_count}명` : '-';
 
         tr.innerHTML = `
             <td><strong>${item.name}</strong></td>
-            <td>${statusStr}</td>
+            <td>${statusBadge}</td>
             <td>${companionStr}</td>
-            <td style="color:#888; font-size:0.9em;">${date}</td>
+            <td style="color:var(--text-muted);">${date}</td>
         `;
         adminRsvpList.appendChild(tr);
     });
 
     if (data.length === 0) {
-        adminRsvpList.innerHTML = '<tr><td colspan="4" style="text-align:center;">아직 제출된 응답이 없습니다.</td></tr>';
+        adminRsvpList.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:#888;">아직 제출된 응답이 없습니다.</td></tr>';
     }
 
     // 통계 업데이트
+    const totalExpected = attendCount + companionTotal;
     document.getElementById('rsvp-attend-count').textContent = attendCount;
     document.getElementById('rsvp-companion-count').textContent = companionTotal;
-    document.getElementById('rsvp-total-count').textContent = attendCount + companionTotal;
+    document.getElementById('rsvp-total-count').textContent = totalExpected;
     document.getElementById('rsvp-absent-count').textContent = absentCount;
+    
+    counts.rsvpTotal = totalExpected;
+    updateOverview();
 }
+
+window.deleteFile = deleteFile;
+window.deleteGuestbook = deleteGuestbook;

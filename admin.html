@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>관리자 모드 | 형식 & 다운</title>
+    <title>Wedding Admin Dashboard</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
@@ -21,76 +22,144 @@
         </div>
 
         <!-- 대시보드 화면 -->
-        <div id="dashboard-section" class="container hidden">
-            <header class="dashboard-header">
-                <h2>관리자 대시보드</h2>
-                <button id="logout-btn" class="btn-outline">로그아웃</button>
-            </header>
+        <div id="dashboard-section" class="dashboard-layout hidden">
+            <!-- 사이드바 -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2><i data-lucide="crown"></i> Admin Pro</h2>
+                </div>
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" data-target="tab-overview">
+                        <i data-lucide="layout-dashboard"></i> 오버뷰
+                    </button>
+                    <button class="nav-item" data-target="tab-gallery">
+                        <i data-lucide="image"></i> 갤러리 관리
+                    </button>
+                    <button class="nav-item" data-target="tab-guestbook">
+                        <i data-lucide="message-square"></i> 방명록 관리
+                    </button>
+                    <button class="nav-item" data-target="tab-rsvp">
+                        <i data-lucide="users"></i> 참석자 통계
+                    </button>
+                </nav>
+                <div class="sidebar-footer">
+                    <button id="logout-btn" class="nav-item logout">
+                        <i data-lucide="log-out"></i> 로그아웃
+                    </button>
+                </div>
+            </aside>
 
-            <div class="tabs">
-                <button class="tab-btn active" data-target="tab-gallery">갤러리 관리</button>
-                <button class="tab-btn" data-target="tab-guestbook">방명록 관리</button>
-                <button class="tab-btn" data-target="tab-rsvp">참석자 통계</button>
-            </div>
+            <!-- 메인 컨텐츠 -->
+            <main class="main-content">
+                <!-- 오버뷰 탭 -->
+                <section id="tab-overview" class="tab-content active">
+                    <div class="page-header">
+                        <h2>대시보드 오버뷰</h2>
+                        <p>현재 웨딩 페이지의 상태를 한눈에 확인하세요.</p>
+                    </div>
+                    <div class="overview-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i data-lucide="image"></i></div>
+                            <div class="stat-info">
+                                <h3>업로드된 사진</h3>
+                                <p id="overview-photo-count">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i data-lucide="message-square"></i></div>
+                            <div class="stat-info">
+                                <h3>남겨진 방명록</h3>
+                                <p id="overview-gb-count">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i data-lucide="users"></i></div>
+                            <div class="stat-info">
+                                <h3>예상 총 참석자</h3>
+                                <p id="overview-rsvp-count">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
             <!-- 갤러리 탭 -->
-            <section id="tab-gallery" class="card tab-content active">
-                <h3>파일 관리 (갤러리 업로드)</h3>
-                <div class="upload-area">
-                    <input type="file" id="file-input" multiple accept="image/*">
-                    <button id="upload-btn">업로드 시작</button>
-                </div>
-                <p id="upload-status"></p>
-                
-                <h4>업로드된 파일 목록</h4>
-                <ul id="file-list" class="file-list"></ul>
-            </section>
+                <section id="tab-gallery" class="tab-content">
+                    <div class="page-header">
+                        <h2>갤러리 관리</h2>
+                        <p>초대장에 노출될 사진들을 업로드하고 삭제할 수 있습니다.</p>
+                    </div>
+                    <div class="card upload-card">
+                        <div class="upload-area">
+                            <i data-lucide="upload-cloud" style="width:40px; height:40px; color:var(--primary); margin-bottom:10px;"></i>
+                            <input type="file" id="file-input" multiple accept="image/*">
+                            <p class="upload-hint">클릭하거나 사진을 이곳으로 드래그하세요</p>
+                            <button id="upload-btn" class="btn-primary mt-3">선택한 파일 업로드</button>
+                        </div>
+                        <p id="upload-status" class="status-msg"></p>
+                    </div>
+                    
+                    <div class="gallery-grid" id="file-list">
+                        <!-- 이미지 그리드 렌더링 -->
+                    </div>
+                </section>
 
-            <!-- 방명록 탭 -->
-            <section id="tab-guestbook" class="card tab-content">
-                <h3>방명록 관리</h3>
-                <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">삭제된 방명록은 복구할 수 없습니다.</p>
-                <ul id="admin-guestbook-list" class="file-list"></ul>
-            </section>
+                <!-- 방명록 탭 -->
+                <section id="tab-guestbook" class="tab-content">
+                    <div class="page-header">
+                        <h2>방명록 관리</h2>
+                        <p>하객들이 남긴 메시지를 관리합니다. 삭제된 메시지는 복구할 수 없습니다.</p>
+                    </div>
+                    <div class="guestbook-masonry" id="admin-guestbook-list">
+                        <!-- 방명록 카드 렌더링 -->
+                    </div>
+                </section>
 
-            <!-- 참석자(RSVP) 탭 -->
-            <section id="tab-rsvp" class="card tab-content">
-                <h3>참석 여부 (RSVP) 현황</h3>
-                <div class="rsvp-stats">
-                    <div class="stat-box">
-                        <span class="stat-label">참석 의사</span>
-                        <strong class="stat-val text-primary" id="rsvp-attend-count">0</strong>명
+                <!-- 참석자(RSVP) 탭 -->
+                <section id="tab-rsvp" class="tab-content">
+                    <div class="page-header">
+                        <h2>참석 여부 (RSVP) 명단</h2>
+                        <p>제출된 참석자 데이터와 통계를 확인합니다.</p>
                     </div>
-                    <div class="stat-box">
-                        <span class="stat-label">동반인 합계</span>
-                        <strong class="stat-val text-primary" id="rsvp-companion-count">0</strong>명
+                    
+                    <div class="rsvp-stats card">
+                        <div class="stat-box">
+                            <span class="stat-label">참석 의사 (본인)</span>
+                            <strong class="stat-val text-primary" id="rsvp-attend-count">0</strong>명
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">동반인 합계</span>
+                            <strong class="stat-val text-primary" id="rsvp-companion-count">0</strong>명
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">총 참석 예상</span>
+                            <strong class="stat-val text-accent" id="rsvp-total-count">0</strong>명
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">불참</span>
+                            <strong class="stat-val text-danger" id="rsvp-absent-count">0</strong>명
+                        </div>
                     </div>
-                    <div class="stat-box">
-                        <span class="stat-label">총 참석 예상</span>
-                        <strong class="stat-val text-accent" id="rsvp-total-count" style="color:var(--primary); font-size: 1.5em;">0</strong>명
+
+                    <div class="card table-container">
+                        <table class="rsvp-table">
+                            <thead>
+                                <tr>
+                                    <th>이름</th>
+                                    <th>상태</th>
+                                    <th>동반인</th>
+                                    <th>제출 일시</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-rsvp-list"></tbody>
+                        </table>
                     </div>
-                    <div class="stat-box">
-                        <span class="stat-label">불참</span>
-                        <strong class="stat-val text-danger" id="rsvp-absent-count" style="color:#d9534f;">0</strong>명
-                    </div>
-                </div>
-                <h4>상세 명단</h4>
-                <div style="overflow-x: auto;">
-                    <table class="rsvp-table">
-                        <thead>
-                            <tr>
-                                <th>이름</th>
-                                <th>참석여부</th>
-                                <th>동반인</th>
-                                <th>제출일</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-rsvp-list"></tbody>
-                    </table>
-                </div>
-            </section>
+                </section>
+            </main>
         </div>
     </div>
     <script type="module" src="admin.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
