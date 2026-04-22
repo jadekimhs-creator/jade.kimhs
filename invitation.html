@@ -456,6 +456,105 @@
             gap: 8px;
             cursor: pointer;
         }
+
+        /* [획기적 기능 1] 디데이 카운터 */
+        .dday-box {
+            margin-top: 30px;
+            padding: 15px;
+            border: 1px solid var(--accent-color);
+            display: inline-block;
+            border-radius: 4px;
+            background: #fff;
+        }
+        .dday-title {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+        .dday-numbers {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .dday-num { display: flex; flex-direction: column; align-items: center; }
+        .dday-num span { font-size: 0.7rem; color: var(--text-light); font-family: 'Pretendard', sans-serif; letter-spacing: 0.05em; }
+
+        /* [획기적 기능 2] 축의금 송금 아코디언 */
+        .remittance-box {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        details {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        summary {
+            padding: 15px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-main);
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+        }
+        summary::-webkit-details-marker { display: none; }
+        .account-details {
+            padding: 15px;
+            border-top: 1px solid var(--border-color);
+            background: #FAFAFA;
+            font-size: 0.95rem;
+        }
+        .account-row { display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center; }
+        .btn-copy {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            background: var(--line-color);
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        /* [획기적 기능 3] 실시간 하트 폭죽 버튼 */
+        .floating-btn-wrap {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+        }
+        .btn-heart-burst {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 15px rgba(197, 168, 128, 0.4);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+        .btn-heart-burst:active { transform: scale(0.9); }
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            color: #e74c3c;
+            font-size: 24px;
+            animation: floatUp 2s ease-out forwards;
+            z-index: 998;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.8); opacity: 1; }
+            100% { transform: translateY(-200px) scale(1.5); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -480,6 +579,19 @@
             <div class="intro-bottom">
                 <p class="wedding-date-text">2026년 4월 22일 수요일 오후 1시</p>
                 <p class="wedding-venue-text">송파두산위브</p>
+
+                <div class="dday-box reveal">
+                    <div class="dday-title">WEDDING DAY</div>
+                    <div class="dday-numbers" id="dday-timer">
+                        <div class="dday-num"><strong id="d-days">00</strong><span>DAYS</span></div>
+                        <div class="dday-num"><strong>:</strong></div>
+                        <div class="dday-num"><strong id="d-hours">00</strong><span>HOURS</span></div>
+                        <div class="dday-num"><strong>:</strong></div>
+                        <div class="dday-num"><strong id="d-mins">00</strong><span>MINS</span></div>
+                        <div class="dday-num"><strong>:</strong></div>
+                        <div class="dday-num"><strong id="d-secs">00</strong><span>SECS</span></div>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -598,10 +710,47 @@
             </form>
         </section>
 
+        <!-- 마음 전하기 (축의금) 섹션 -->
+        <section class="section reveal" style="background-color: #FFFFFF;">
+            <div class="divider"></div>
+            <h2 class="section-label">For Your Heart</h2>
+            <p style="font-size: 0.95rem; color: var(--text-light); margin-bottom: 30px;">참석이 어려우신 분들을 위해<br>계좌번호를 기재하였습니다.</p>
+            
+            <div class="remittance-box">
+                <details>
+                    <summary>신랑측 계좌번호 보기 <i data-lucide="chevron-down" style="width:16px;"></i></summary>
+                    <div class="account-details">
+                        <div class="account-row">
+                            <div>국민 123456-00-123456<br><strong style="color:var(--text-main);">홍길동</strong></div>
+                            <button class="btn-copy" onclick="copyToClipboard('12345600123456')">복사</button>
+                        </div>
+                        <a href="https://toss.im/" target="_blank" style="display:block; text-align:center; padding:10px; background:#e8f0fe; color:#1a73e8; text-decoration:none; border-radius:4px; font-weight:bold; margin-top:10px;">토스로 송금하기</a>
+                    </div>
+                </details>
+                <details>
+                    <summary>신부측 계좌번호 보기 <i data-lucide="chevron-down" style="width:16px;"></i></summary>
+                    <div class="account-details">
+                        <div class="account-row">
+                            <div>신한 110-123-456789<br><strong style="color:var(--text-main);">박지민</strong></div>
+                            <button class="btn-copy" onclick="copyToClipboard('110123456789')">복사</button>
+                        </div>
+                        <a href="https://kakaopay.com/" target="_blank" style="display:block; text-align:center; padding:10px; background:#fae100; color:#3b1e1e; text-decoration:none; border-radius:4px; font-weight:bold; margin-top:10px;">카카오페이로 송금하기</a>
+                    </div>
+                </details>
+            </div>
+        </section>
+
         <footer class="footer-premium reveal">
             <p class="final-thankyou">Thank You</p>
             <a href="#" class="btn-back">혼주에게 연락하기</a>
         </footer>
+    </div>
+
+    <!-- 플로팅 하트 버튼 -->
+    <div class="floating-btn-wrap">
+        <button class="btn-heart-burst" id="heart-btn">
+            <i data-lucide="heart" fill="#fff"></i>
+        </button>
     </div>
 
     <script type="module">
@@ -616,6 +765,53 @@
             });
         }, { threshold: 0.15 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // 복사 기능
+        window.copyToClipboard = function(text) {
+            navigator.clipboard.writeText(text).then(() => alert('계좌번호가 복사되었습니다.'));
+        };
+
+        // 플로팅 하트 애니메이션 로직
+        const heartBtn = document.getElementById('heart-btn');
+        heartBtn.addEventListener('click', (e) => {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.innerHTML = '❤️';
+            // 버튼 위치 근처에서 시작
+            const rect = heartBtn.getBoundingClientRect();
+            particle.style.left = (rect.left + 15 + (Math.random() * 20 - 10)) + 'px';
+            particle.style.top = rect.top + 'px';
+            
+            document.body.appendChild(particle);
+            setTimeout(() => {
+                particle.remove();
+            }, 2000);
+        });
+
+        // 디데이 카운터 로직
+        function updateDday() {
+            // 예식일 설정: 2026년 4월 22일 오후 1시
+            const weddingDate = new Date('2026-04-22T13:00:00+09:00').getTime();
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                document.getElementById('dday-timer').innerHTML = '<div class="dday-num"><strong>JUST MARRIED!</strong></div>';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('d-days').textContent = String(days).padStart(2, '0');
+            document.getElementById('d-hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('d-mins').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('d-secs').textContent = String(seconds).padStart(2, '0');
+        }
+        setInterval(updateDday, 1000);
+        updateDday();
 
         // 갤러리 이미지 로드
         async function loadGallery() {
