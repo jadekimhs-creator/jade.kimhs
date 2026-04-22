@@ -44,6 +44,9 @@
                     <button class="nav-item" data-target="tab-rsvp">
                         <i data-lucide="users"></i> 참석자 통계
                     </button>
+                    <button class="nav-item" data-target="tab-settings">
+                        <i data-lucide="settings"></i> 웨딩 설정
+                    </button>
                 </nav>
                 <div class="sidebar-footer">
                     <button id="logout-btn" class="nav-item logout">
@@ -138,6 +141,28 @@
                         <div id="bgm-preview-container" style="margin-top: 20px;">
                             <!-- BGM 미리듣기 동적 렌더링 -->
                             <p style="color:var(--text-muted);">현재 등록된 음악이 없습니다.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 웨딩 설정 탭 -->
+                <section id="tab-settings" class="tab-content">
+                    <div class="page-header">
+                        <h2>웨딩 설정</h2>
+                        <p>결혼식 날짜와 시간을 설정하면 쫘첩장의 D-Day 카운터가 자동으로 업데이트됩니다.</p>
+                    </div>
+
+                    <div class="card" style="max-width: 480px;">
+                        <h3 style="margin-bottom: 20px; font-size: 1.1rem;">💍 결혼식 날짜 / 시간 설정</h3>
+                        <label style="display:block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-muted);">DATE & TIME</label>
+                        <input type="datetime-local" id="wedding-date-input"
+                            style="width:100%; padding:14px; border:1px solid var(--border); border-radius:8px; font-size:1rem; margin-bottom:20px; font-family: inherit;">
+                        <button id="save-wedding-date-btn" class="btn-primary" style="width:100%; padding:14px;">D-Day 날짜 저장하기</button>
+                        <p id="settings-status" style="margin-top: 12px; font-size: 0.9rem; color: var(--accent);"></p>
+
+                        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border);">
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">&#9432; 현재 저장된 날짜</p>
+                            <p id="current-wedding-date" style="font-size: 1.1rem; font-weight: 600; margin-top: 6px;">-</p>
                         </div>
                     </div>
                 </section>

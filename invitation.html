@@ -964,15 +964,29 @@
             }, 2000);
         });
 
-        // 디데이 카운터 로직
+        // 디데이 카운터 로직 (Supabase settings에서 날짜 로드)
+        let weddingTimestamp = new Date('2026-04-22T13:00:00+09:00').getTime(); // 기본값
+
+        async function initDday() {
+            const { data, error } = await supabase
+                .from('settings')
+                .select('value')
+                .eq('key', 'wedding_date')
+                .single();
+            
+            if (!error && data) {
+                weddingTimestamp = new Date(data.value).getTime();
+            }
+            updateDday();
+            setInterval(updateDday, 1000);
+        }
+
         function updateDday() {
-            // 예식일 설정: 2026년 4월 22일 오후 1시
-            const weddingDate = new Date('2026-04-22T13:00:00+09:00').getTime();
             const now = new Date().getTime();
-            const distance = weddingDate - now;
+            const distance = weddingTimestamp - now;
 
             if (distance < 0) {
-                document.getElementById('dday-timer').innerHTML = '<div class="dday-num"><strong>JUST MARRIED!</strong></div>';
+                document.getElementById('dday-timer').innerHTML = '<div class="dday-num"><strong>JUST MARRIED! 🎉</strong></div>';
                 return;
             }
 
@@ -986,8 +1000,7 @@
             document.getElementById('d-mins').textContent = String(minutes).padStart(2, '0');
             document.getElementById('d-secs').textContent = String(seconds).padStart(2, '0');
         }
-        setInterval(updateDday, 1000);
-        updateDday();
+        initDday();
 
         // BGM 로직
         const bgmAudio = document.getElementById('bgm-audio');

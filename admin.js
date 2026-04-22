@@ -19,6 +19,7 @@ supabase.auth.onAuthStateChange((event, session) => {
         loadGuestbook();
         loadRSVP();
         loadBGMPreview();
+        loadWeddingSettings();
     } else {
         loginSection.classList.remove('hidden');
         dashboardSection.classList.add('hidden');
@@ -268,3 +269,46 @@ async function loadRSVP() {
 
 window.deleteFile = deleteFile;
 window.deleteGuestbook = deleteGuestbook;
+
+// 웨딩 날짜 설정 (settings 테이블)
+async function loadWeddingSettings() {
+    const { data, error } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'wedding_date')
+        .single();
+
+    const display = document.getElementById('current-wedding-date');
+    const input = document.getElementById('wedding-date-input');
+
+    if (!error && data) {
+        const d = new Date(data.value);
+        display.textContent = d.toLocaleString('ko-KR', { year:'numeric', month:'long', day:'numeric', weekday:'long', hour:'2-digit', minute:'2-digit' });
+        // datetime-local input은 'YYYY-MM-DDTHH:mm' 형식
+        const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+        input.value = local;
+    } else {
+        display.textContent = '아직 설정된 날짜가 없습니다.';
+    }
+}
+
+document.getElementById('save-wedding-date-btn').addEventListener('click', async () => {
+    const input = document.getElementById('wedding-date-input');
+    const status = document.getElementById('settings-status');
+    const value = input.value;
+    if (!value) { status.textContent = '날짜를 선택해주세요.'; return; }
+
+    // ISO 형식으로 변환
+    const isoDate = new Date(value).toISOString();
+
+    const { error } = await supabase
+        .from('settings')
+        .upsert({ key: 'wedding_date', value: isoDate }, { onConflict: 'key' });
+
+    if (error) {
+        status.textContent = '저장 실패: ' + error.message;
+    } else {
+        status.textContent = '✅ 날짜가 성공적으로 저장되었습니다! 청첩장 D-Day가 자동 업데이트됩니다.';
+        loadWeddingSettings();
+    }
+});
