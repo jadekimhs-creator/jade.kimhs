@@ -154,46 +154,6 @@ async function loadGuestbook() {
     });
 }
 
-// 방명록 관리
-const adminGbList = document.getElementById('admin-guestbook-list');
-
-async function loadGuestbook() {
-    const { data, error } = await supabase.from('guestbook').select('*').order('created_at', { ascending: false });
-    
-    adminGbList.innerHTML = '';
-    if (error) {
-        console.error(error);
-        return;
-    }
-    if (data.length === 0) {
-        adminGbList.innerHTML = '<li>등록된 방명록이 없습니다.</li>';
-        return;
-    }
-
-    data.forEach(item => {
-        const date = new Date(item.created_at).toLocaleString('ko-KR');
-        const li = document.createElement('li');
-        li.style.flexDirection = 'column';
-        li.style.alignItems = 'flex-start';
-        li.style.gap = '10px';
-        
-        li.innerHTML = `
-            <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-                <strong>${item.name} <span style="font-size:0.8em; color:#888; font-weight:normal;">(${date})</span></strong>
-            </div>
-            <div style="width: 100%; white-space: pre-wrap; color: #444; font-size: 0.95em;">${item.message}</div>
-        `;
-        
-        const headerDiv = li.querySelector('div');
-        const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = '삭제';
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.onclick = () => deleteGuestbook(item.id);
-        
-        headerDiv.appendChild(deleteBtn);
-        adminGbList.appendChild(li);
-    });
-}
 
 async function deleteGuestbook(id) {
     if (!confirm('방명록을 정말 삭제하시겠습니까?')) return;
