@@ -6,6 +6,8 @@
     <title>우리의 소중한 초대</title>
     <link rel="stylesheet" href="invitation.css">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Lucide Icons for a modern touch -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
     <div class="container">
@@ -20,6 +22,7 @@
         <section class="main-image reveal">
             <div class="img-wrapper">
                 <img src="img/KakaoTalk_20260422_000845968.jpg" alt="Main Photo">
+                <div class="img-overlay"></div>
             </div>
         </section>
 
@@ -35,7 +38,7 @@
         </section>
 
         <section class="gallery reveal">
-            <h2 class="section-title">Gallery</h2>
+            <h2 class="section-title">Precious Moments</h2>
             <div class="gallery-grid">
                 <div class="grid-item tall"><img src="img/KakaoTalk_20260422_000845968_01.jpg" alt="Gallery 1"></div>
                 <div class="grid-item"><img src="img/KakaoTalk_20260422_000845968_02.jpg" alt="Gallery 2"></div>
@@ -44,31 +47,65 @@
             </div>
         </section>
 
-        <section class="info reveal">
-            <div class="info-card">
-                <div class="info-item">
-                    <h3>Date</h3>
-                    <p>2026년 4월 22일 수요일 오후 1시</p>
+        <section class="location reveal">
+            <h2 class="section-title">Location</h2>
+            <div class="location-info">
+                <h3 class="venue-name">송파두산위브</h3>
+                <p class="address">서울특별시 송파구 오금로 527</p>
+                
+                <div class="map-container">
+                    <!-- Placeholder for Map Visual - Using a styled div to look professional -->
+                    <div class="map-placeholder">
+                        <i data-lucide="map-pin" class="map-icon"></i>
+                        <span>Naver Map Area</span>
+                    </div>
+                    <a href="https://map.naver.com/v5/search/%EC%86%A1%ED%8C%8C%EB%91%90%EC%82%B0%EC%9C%84%EB%B8%8C" target="_blank" class="map-btn">
+                        <i data-lucide="navigation"></i> 네이버 지도로 보기
+                    </a>
                 </div>
-                <div class="info-divider"></div>
-                <div class="info-item">
-                    <h3>Location</h3>
-                    <p>행복한 예식장 루비홀</p>
+
+                <div class="transport">
+                    <div class="transport-item">
+                        <span class="label">지하철</span>
+                        <p>5호선 마천역 2번 출구 (도보 5분)</p>
+                    </div>
+                    <div class="transport-item">
+                        <span class="label">버스</span>
+                        <p>송파두산위브 정류장 하차<br>3315, 3316, 3318, 3416</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="countdown reveal">
+            <div id="timer">
+                <div class="time-unit">
+                    <span id="days">00</span>
+                    <label>Days</label>
+                </div>
+                <div class="time-unit">
+                    <span id="hours">00</span>
+                    <label>Hours</label>
+                </div>
+                <div class="time-unit">
+                    <span id="minutes">00</span>
+                    <label>Mins</label>
                 </div>
             </div>
         </section>
 
         <footer class="footer reveal">
+            <p class="thank-you">Thank You</p>
             <a href="index.html" class="home-btn">← Back to Main</a>
         </footer>
     </div>
 
     <script>
-        // 간단한 스크롤 애니메이션
-        const observerOptions = {
-            threshold: 0.1
-        };
+        // Icons
+        lucide.createIcons();
 
+        // Reveal Animation
+        const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -76,8 +113,23 @@
                 }
             });
         }, observerOptions);
-
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Countdown Timer
+        const weddingDate = new Date("April 22, 2026 13:00:00").getTime();
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+            
+            document.getElementById("days").innerHTML = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerHTML = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("minutes").innerHTML = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            
+            if (distance < 0) {
+                clearInterval(timer);
+                document.getElementById("timer").innerHTML = "Wedding Day!";
+            }
+        }, 1000);
     </script>
 </body>
 </html>
