@@ -3,38 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invitation | 형식 & 다운</title>
-    <link rel="stylesheet" href="invitation.css">
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+    <title>형식 & 다운 결혼합니다</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+KR:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
     <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* [기본 설정 & 트렌디한 컬러 팔레트] */
+        :root {
+            --bg-color: #FDFBF7; /* 따뜻하고 고급스러운 오프화이트/베이지 */
+            --text-main: #333333;
+            --text-light: #777777;
+            --accent-color: #D4C4B7; /* 차분한 샌드 베이지 포인트 */
+            --line-color: #EAE3D9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #ECECEC; /* PC에서 볼 때 배경색 */
+            font-family: 'Pretendard', sans-serif;
+            color: var(--text-main);
+            line-height: 1.6;
+            word-break: keep-all;
+        }
+
+        /* 모바일 최적화 컨테이너 (PC에서도 예쁘게 보이도록 중앙 정렬) */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: var(--bg-color);
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        /* [애니메이션 효과] */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* [공통 섹션 스타일] */
+        .section {
+            padding: 80px 30px;
+            text-align: center;
+        }
+        .section-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            letter-spacing: 0.2em;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        /* [Header / Intro] */
+        .header-premium {
+            padding: 60px 20px 80px;
+            text-align: center;
+        }
+        .intro-top {
+            margin-bottom: 30px;
+        }
+        .wedding-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            color: var(--text-light);
+        }
+        
+        .intro-names {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        .and-symbol {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            font-style: italic;
+        }
+
+        /* 최신 트렌드: 아치형 메인 이미지 */
+        .intro-image {
+            margin-bottom: 40px;
+        }
+        .frame-premium {
+            width: 85%;
+            margin: 0 auto;
+            aspect-ratio: 3 / 4;
+            border-radius: 200px 200px 0 0; /* 아치 형태 */
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        }
+        .frame-premium img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .intro-bottom {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+        .wedding-date-text { margin-bottom: 5px; }
+
+        /* [초대말 섹션] */
+        .letter-premium {
+            background-color: #FFFFFF;
+        }
+        .letter-body {
+            font-family: 'Noto Serif KR', serif;
+            line-height: 2.2;
+            font-size: 1.05rem;
+            color: #444;
+            margin-bottom: 50px;
+        }
+        .letter-body p { margin-bottom: 20px; }
+        
+        .family-names {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        .parent-row { margin-bottom: 10px; }
+        .parent-row span { color: var(--text-light); font-size: 0.95rem; }
+        .parent-row strong { font-weight: 600; margin-left: 5px; }
+
+        /* [달력 섹션] */
+        .calendar-premium {
+            background-color: var(--bg-color);
+        }
+        .calendar-month {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 30px;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 15px 5px;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+            color: var(--text-main);
+        }
+        .day-label {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        .wedding-target {
+            background-color: var(--accent-color);
+            color: #fff;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(212, 196, 183, 0.5);
+        }
+        .calendar-info {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            padding-top: 20px;
+            border-top: 1px solid var(--line-color);
+        }
+
+        /* [갤러리 섹션] */
+        .gallery-editorial {
+            background-color: #FFFFFF;
+        }
+        .editorial-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .item-full {
+            grid-column: 1 / -1;
+            aspect-ratio: 4 / 3;
+        }
+        .item-half {
+            aspect-ratio: 1 / 1;
+        }
+        .editorial-grid img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* [오시는 길 섹션] */
+        .location-premium {
+            background-color: var(--bg-color);
+        }
+        .venue-title {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        .venue-address {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+        .map-box-premium {
+            margin-bottom: 40px;
+        }
+        .map-ui {
+            width: 100%;
+            height: 200px;
+            background-color: #EFEFEF; /* 실제 지도 API 삽입 전 플레이스홀더 */
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .nav-buttons a {
+            flex: 1;
+            padding: 12px 0;
+            text-decoration: none;
+            color: var(--text-main);
+            border: 1px solid var(--line-color);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .nav-buttons a:hover {
+            background-color: var(--line-color);
+        }
+        .traffic-guide {
+            text-align: left;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+        .traffic-item {
+            margin-bottom: 20px;
+        }
+        .traffic-item:last-child { margin-bottom: 0; }
+        .traffic-icon {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+            letter-spacing: 0.1em;
+        }
+        .traffic-item p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* [Footer] */
+        .footer-premium {
+            padding: 60px 20px;
+            background-color: var(--accent-color);
+            color: #fff;
+            text-align: center;
+        }
+        .final-thankyou {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .btn-back {
+            display: inline-block;
+            text-decoration: none;
+            color: #fff;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            border-bottom: 1px solid #fff;
+            padding-bottom: 3px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <!-- [Intro] Salon de Letter Style Cover -->
         <header class="header-premium reveal">
             <div class="intro-top">
                 <span class="wedding-label">WEDDING INVITATION</span>
-                <div class="intro-line"></div>
             </div>
+            
+            <div class="intro-image">
+                <div class="frame-premium">
+                    <img src="img/KakaoTalk_20260422_000845968.jpg" alt="Wedding Photo" onerror="this.src='https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+                </div>
+            </div>
+
             <div class="intro-names">
                 <span class="eng-name">Hyungsik</span>
                 <span class="and-symbol">&</span>
                 <span class="eng-name">Dawoon</span>
             </div>
-            <div class="intro-image">
-                <div class="frame-premium">
-                    <img src="img/KakaoTalk_20260422_000845968.jpg" alt="Main Image">
-                </div>
-            </div>
+
             <div class="intro-bottom">
-                <p class="wedding-date-text">2026. 04. 22. WED. PM 1:00</p>
+                <p class="wedding-date-text">2026년 4월 22일 수요일 오후 1시</p>
                 <p class="wedding-venue-text">송파두산위브</p>
             </div>
         </header>
 
-        <!-- [Message] Poetic Letter -->
         <section class="section letter-premium reveal">
-            <h2 class="section-label">INVITATION</h2>
+            <h2 class="section-label">Invitation</h2>
             <div class="letter-body">
                 <p>두 사람이 하나가 되어<br>새로운 인생을 시작합니다.</p>
                 <p>함께 있으면 세상이 아름다워 보이는<br>소중한 사람을 만났습니다.</p>
@@ -50,43 +339,40 @@
             </div>
         </section>
 
-        <!-- [Calendar] Minimalist Monthly View -->
         <section class="section calendar-premium reveal">
             <div class="calendar-container">
                 <h3 class="calendar-month">APRIL</h3>
                 <div class="calendar-grid">
-                    <div class="day-label">S</div><div class="day-label">M</div><div class="day-label">T</div><div class="day-label">W</div><div class="day-label">T</div><div class="day-label">F</div><div class="day-label">S</div>
-                    <div></div><div></div><div></div><div class="wedding-day">1</div><div>2</div><div>3</div><div>4</div>
+                    <div class="day-label" style="color:#d98880;">S</div><div class="day-label">M</div><div class="day-label">T</div><div class="day-label">W</div><div class="day-label">T</div><div class="day-label">F</div><div class="day-label">S</div>
+                    <div></div><div></div><div></div><div>1</div><div>2</div><div>3</div><div>4</div>
                     <div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div>
                     <div>12</div><div>13</div><div>14</div><div>15</div><div>16</div><div>17</div><div>18</div>
                     <div>19</div><div>20</div><div>21</div><div class="wedding-target">22</div><div>23</div><div>24</div><div>25</div>
-                    <div>26</div><div>27</div><div>28</div><div>29</div><div>30</div>
+                    <div>26</div><div>27</div><div>28</div><div>29</div><div>30</div><div></div><div></div>
                 </div>
                 <div class="calendar-info">2026. 04. 22. 수요일 오후 1시</div>
             </div>
         </section>
 
-        <!-- [Gallery] Editorial Layout -->
         <section class="section gallery-editorial reveal">
-            <h2 class="section-label">GALLERY</h2>
+            <h2 class="section-label">Gallery</h2>
             <div class="editorial-grid">
-                <div class="item-full"><img src="img/KakaoTalk_20260422_000845968_01.jpg" alt=""></div>
-                <div class="item-half"><img src="img/KakaoTalk_20260422_000845968_02.jpg" alt=""></div>
-                <div class="item-half"><img src="img/KakaoTalk_20260422_000845968_03.jpg" alt=""></div>
-                <div class="item-full"><img src="img/KakaoTalk_20260422_000845968_04.jpg" alt=""></div>
+                <div class="item-full"><img src="img/KakaoTalk_20260422_000845968_01.jpg" alt="" onerror="this.src='https://images.unsplash.com/photo-1606800052052-a08af7148866?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'"></div>
+                <div class="item-half"><img src="img/KakaoTalk_20260422_000845968_02.jpg" alt="" onerror="this.src='https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'"></div>
+                <div class="item-half"><img src="img/KakaoTalk_20260422_000845968_03.jpg" alt="" onerror="this.src='https://images.unsplash.com/photo-1520854221256-17451cc331bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'"></div>
+                <div class="item-full"><img src="img/KakaoTalk_20260422_000845968_04.jpg" alt="" onerror="this.src='https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'"></div>
             </div>
         </section>
 
-        <!-- [Location] Map & Navigation -->
         <section class="section location-premium reveal">
-            <h2 class="section-label">LOCATION</h2>
+            <h2 class="section-label">Location</h2>
             <div class="location-body">
                 <h3 class="venue-title">송파두산위브</h3>
                 <p class="venue-address">서울특별시 송파구 오금로 527</p>
                 
                 <div class="map-box-premium">
                     <div class="map-ui">
-                        <i data-lucide="map-pin"></i>
+                        <i data-lucide="map-pin"></i> 지도가 들어갈 자리입니다
                     </div>
                     <div class="nav-buttons">
                         <a href="https://map.naver.com/v5/search/%EC%86%A1%ED%8C%8C%EB%91%90%EC%82%B0%EC%9C%84%EB%B8%8C" target="_blank">네이버 지도</a>
@@ -107,11 +393,9 @@
             </div>
         </section>
 
-        <!-- [Footer] Final Message -->
         <footer class="footer-premium reveal">
             <p class="final-thankyou">Thank You</p>
-            <div class="footer-line"></div>
-            <a href="index.html" class="btn-back">MAIN PAGE</a>
+            <a href="#" class="btn-back">혼주에게 연락하기</a>
         </footer>
     </div>
 
@@ -119,9 +403,11 @@
         lucide.createIcons();
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
+                // 화면에 요소가 보이면 active 클래스 추가 (스르륵 나타남)
                 if (entry.isIntersecting) entry.target.classList.add('active');
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.15 }); // 15% 정도 보일 때 애니메이션 시작
+        
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
